@@ -1,4 +1,4 @@
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 import { NgModule } from '@angular/core';
@@ -14,7 +14,7 @@ import { RedirectComponent } from './screens/redirect/redirect.component';
     ProtectedComponent,
     RedirectComponent,
   ],
-  imports: [BrowserModule, FormsModule, AppRoutingModule],
+  imports: [BrowserModule, ReactiveFormsModule, AppRoutingModule],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -1,15 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { supabase } from '../../services/supabase-client';
 import { Router } from '@angular/router';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
   templateUrl: './log-in.component.html',
+  styleUrl: './log-in.component.scss',
 })
 export class LogInComponent implements OnInit {
-  email: string = '';
-  password: string = '';
-  message: string = '';
+  protected form = new FormGroup({
+    email: new FormControl('', [Validators.required, Validators.email]),
+    password: new FormControl('', [Validators.required, Validators.min(2)]),
+  });
 
   constructor(private router: Router) {}
 
@@ -23,12 +26,12 @@ export class LogInComponent implements OnInit {
     }
   }
 
-  async login() {
-    const { error } = await supabase.auth.signInWithPassword({
-      email: this.email,
-      password: this.password,
-    });
-
-    this.message = error ? error.message : 'Login successful!';
+  protected async onSubmit() {
+    if (this.form.valid) {
+      const { error } = await supabase.auth.signInWithPassword({
+        email: this.form.value.email!,
+        password: this.form.value.password!,
+      });
+    }
   }
 }
