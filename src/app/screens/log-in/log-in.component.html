@@ -4,11 +4,11 @@
       <h2 class="app-log-in-screen__card__header__title">Log in to play</h2>
     </div>
     <div class="app-log-in-screen__card__body">
-      <form [formGroup]="form" (ngSubmit)="onSubmit()">
-        <div>
-          <label>Email:</label>
-          <input formControlName="email" />
-          <div *ngIf="form.get('email')?.invalid && form.get('email')?.touched">
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="app-log-in-screen__card__body__form">
+        <div class="app-log-in-screen__card__body__form__input-group">
+          <label class="app-log-in-screen__card__body__form__input-group__label">Email:</label>
+          <input formControlName="email" class="app-log-in-screen__card__body__form__input-group__input" />
+          <div *ngIf="form.get('email')?.invalid && form.get('email')?.touched" class="app-log-in-screen__card__body__form__input-group__error">
             <small *ngIf="form.get('email')?.errors?.['required']"
               >Email is required.</small
             >
@@ -18,13 +18,14 @@
           </div>
         </div>
 
-        <div>
-          <label>Password:</label>
-          <input type="password" formControlName="password" />
+        <div class="app-log-in-screen__card__body__form__input-group">
+          <label class="app-log-in-screen__card__body__form__input-group__label">Password:</label>
+          <input type="password" formControlName="password" class="app-log-in-screen__card__body__form__input-group__input"/>
           <div
             *ngIf="
               form.get('password')?.invalid && form.get('password')?.touched
             "
+            class="app-log-in-screen__card__body__form__input-group__error"
           >
             <small *ngIf="form.get('password')?.errors?.['required']"
               >Password is required.</small
@@ -35,7 +36,7 @@
           </div>
         </div>
 
-        <button type="submit" [disabled]="form.invalid">Submit</button>
+        <button type="submit" [disabled]="form.invalid"  class="app-log-in-screen__card__body__form__submit-button">Submit</button>
       </form>
     </div>
   </div>

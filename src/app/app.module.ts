@@ -5,7 +5,7 @@ import { NgModule } from '@angular/core';
 import { LogInComponent } from './screens/log-in/log-in.component';
 import { AppRoutingModule } from './app-routing.module';
 import { ProtectedComponent } from './screens/protected/protected.component';
-import { RedirectComponent } from './screens/redirect/redirect.component';
+import { RedirectComponent } from './components/redirect/redirect.component';
 
 @NgModule({
   declarations: [
@@ -14,7 +14,11 @@ import { RedirectComponent } from './screens/redirect/redirect.component';
     ProtectedComponent,
     RedirectComponent,
   ],
-  imports: [BrowserModule, ReactiveFormsModule, AppRoutingModule],
+  imports: [
+    BrowserModule, 
+    ReactiveFormsModule, 
+    AppRoutingModule
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

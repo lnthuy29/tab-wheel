@@ -7,9 +7,9 @@
   align-items: flex-end;
 
   &__card {
-    height: 80%;
+    height: 90%;
     background: #ffffff;
-    width: fit-content;
+    width: 50%;
     border-top-left-radius: 16px;
     border-top-right-radius: 16px;
 
@@ -17,7 +17,8 @@
       background-image: url("../../assets/images/log-in.jpg");
       background-size: cover;
       background-position: center;
-      height: 450px;
+      border-radius: 24px 24px 0 0;
+      height: 250px;
       clip-path: path("M0,0 L0,300 C300,400 600,200 900,300 L900,0 Z");
 
       &__title {
@@ -27,7 +28,49 @@
     }
 
     &__body {
-      padding: 24px;
+      padding: 48px;
+
+      &__form {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+
+        &__input-group {
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+
+          &__label {
+            font-weight: 600;
+          }
+
+          &__input {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+          }
+
+          &__error {
+            color: red;
+            font-size: 12px;
+          }
+        }
+
+        &__submit-button {
+          padding: 12px;
+          background-color: #6200ea;
+          color: white;
+          border: none;
+          border-radius: 100px;
+          cursor: pointer;
+          font-size: 16px;
+
+          &:hover {
+            background-color: #3700b3;
+          }
+        }
+      }
     }
   }
 }
