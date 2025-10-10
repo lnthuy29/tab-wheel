@@ -1,23 +1,30 @@
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule, provideAnimations } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
 import { NgModule } from '@angular/core';
-import { LogInComponent } from './screens/log-in/log-in.component';
+import { LogInScreenComponent } from './screens/log-in/log-in-screen.component';
 import { AppRoutingModule } from './app-routing.module';
 import { ProtectedComponent } from './screens/protected/protected.component';
 import { RedirectComponent } from './components/redirect/redirect.component';
+import { provideToastr } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
     AppComponent,
-    LogInComponent,
+    LogInScreenComponent,
     ProtectedComponent,
     RedirectComponent,
   ],
   imports: [
-    BrowserModule, 
-    ReactiveFormsModule, 
-    AppRoutingModule
+    BrowserModule,
+    BrowserAnimationsModule,
+    ReactiveFormsModule,
+    AppRoutingModule,
+],
+  providers: [
+    provideAnimations(),
+    provideToastr()  
   ],
   bootstrap: [AppComponent],
 })

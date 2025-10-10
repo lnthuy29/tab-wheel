@@ -1,0 +1,92 @@
+.app-log-in-screen {
+  width: 100%;
+  height: 100%;
+  background-image: linear-gradient(to top, #cd9cf2 0%, #f6f3ff 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+
+  &__app-name {
+    font-size: 48px;
+    font-weight: bold;
+    color: var(--color-purple-900);
+    margin-top: 32px;
+  }
+
+  &__card {
+    height: 80%;
+    width: 50%;
+    background: whitesmoke;
+    border-radius: 24px 24px 0 0;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+
+    &__header {
+      background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url("../../assets/images/log-in.jpg");
+      background-size: cover;
+      background-position: left center;
+      border-radius: 24px 24px 0 0;
+      height: 200px;
+      clip-path: path("M0,0 L0,180 Q150,220 300,180 Q450,140 600,180 Q750,220 900,180 L900,0 Z");
+
+      &__title {
+        padding: 48px;
+        color: #ffffff;
+      }
+    }
+
+    &__body {
+      padding: 24px 48px;
+
+      &__form {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+
+        &__input-group {
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+
+          &__label {
+            font-weight: 600;
+          }
+
+          &__input {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+          }
+
+          &__error {
+            color: red;
+            font-size: 12px;
+          }
+        }
+
+        &__submit-button {
+          padding: 12px;
+          margin-top: 12px;
+          background-color: var(--color-primary);
+          color: white;
+          border: none;
+          border-radius: 100px;
+          cursor: pointer;
+          font-size: 16px;
+
+          &:hover {
+            filter: brightness(120%);
+          }
+
+          &:disabled {
+            filter: none;
+            background-color: var(--color-disabled);
+            cursor: not-allowed;
+          }
+        }
+      }
+    }
+  }
+}
+
