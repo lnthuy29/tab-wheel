@@ -7,7 +7,7 @@ import { UserProfile } from 'src/app/models/profile.interface';
 @Injectable({
   providedIn: 'root',
 })
-export class LogInService {
+export class AuthService {
   async getSession() {
     return await supabase.auth.getSession();
   }

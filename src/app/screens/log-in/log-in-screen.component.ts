@@ -9,7 +9,7 @@ import { ToastrService } from 'ngx-toastr';
 import { LoadingState } from 'src/app/models/loading-state.enum';
 import { Store } from '@ngrx/store';
 import { setUserProfile } from 'src/app/store/profile/profile.action';
-import { LogInService } from './services/log-in.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-log-in-screen',
@@ -37,13 +37,13 @@ export class LogInScreenComponent implements OnInit {
     private store: Store,
     private router: Router,
     private toastr: ToastrService,
-    private logInService: LogInService,
+    private service: AuthService,
   ) {}
 
   public async ngOnInit(): Promise<void> {
     const {
       data: { session },
-    } = await this.logInService.getSession();
+    } = await this.service.getSession();
     if (session) {
       this.router.navigate(['']);
     }
@@ -53,7 +53,7 @@ export class LogInScreenComponent implements OnInit {
     if (this.form.valid) {
       this.loadingState = LoadingState.LOADING;
 
-      const { error } = await this.logInService.signIn(
+      const { error } = await this.service.signIn(
         this.form.value.email!,
         this.form.value.password!,
       );
@@ -70,11 +70,12 @@ export class LogInScreenComponent implements OnInit {
 
       const {
         data: { user },
-      } = await this.logInService.getUser();
+      } = await this.service.getUser();
 
       if (user) {
-        const profile =
-          await this.logInService.getUserProfile(user.id);
+        const profile = await this.service.getUserProfile(
+          user.id,
+        );
 
         if (!profile) {
           this.loadingState = LoadingState.ERROR;

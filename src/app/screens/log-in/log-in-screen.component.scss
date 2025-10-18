@@ -51,53 +51,9 @@
         flex-direction: column;
         gap: 24px;
 
-        &__input-group {
-          display: flex;
-          flex-direction: column;
-          gap: 4px;
-
-          &__label {
-            font-weight: 600;
-          }
-
-          &__input {
-            padding: 8px;
-            border: none;
-            border-bottom: 2px solid var(--color-border);
-            border-radius: 4px;
-
-            &:focus {
-              outline: none;
-              border-bottom: 2px solid var(--color-primary);
-            }
-          }
-
-          &__error {
-            font-size: var(--font-size-xs);
-            color: red;
-          }
-        }
-
         &__submit-button {
           margin-top: 12px;
-          padding: 12px;
-          border: none;
-          border-radius: 100px;
-          background-color: var(--color-primary);
-          color: var(--color-white);
-          font-size: var(--font-size-lg);
-          font-weight: 600;
-          cursor: pointer;
-
-          &:hover {
-            filter: brightness(120%);
-          }
-
-          &:disabled {
-            background-color: var(--color-disabled);
-            cursor: not-allowed;
-            filter: none;
-          }
+          @extend .button-primary;
         }
       }
     }

@@ -5,20 +5,28 @@
     (click)="$event.stopPropagation()"
   >
     <div class="app-modal__card__header">
-      <h3 class="app-modal__card__header__title">
-        {{ configuration.title }}
-      </h3>
-      <i
-        class="app-modal__card__header__close-button mdi mdi-close"
-      ></i>
+      <div class="app-modal__card__header__title-area">
+        <h3
+          class="app-modal__card__header__title-area__title"
+        >
+          {{ configuration.title }}
+        </h3>
+        <i
+          *ngIf="configuration.showCloseButton !== false"
+          (click)="closeModal()"
+          class="app-modal__card__header__title-area__close-button mdi mdi-close"
+        ></i>
+      </div>
+      <div
+        class="app-modal__card__header__subtitle"
+        *ngIf="configuration.subtitle"
+      >
+        {{ configuration.subtitle }}
+      </div>
     </div>
 
     <div class="app-modal__card__content">
       <ng-content select="[content]"></ng-content>
-    </div>
-
-    <div class="app-modal__card__footer">
-      <button (click)="closeModal()">Cancel</button>
     </div>
   </div>
 </div>

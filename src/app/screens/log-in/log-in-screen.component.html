@@ -15,23 +15,18 @@
         (keydown.enter)="onSubmit()"
         class="app-log-in-screen__card__body__form"
       >
-        <div
-          class="app-log-in-screen__card__body__form__input-group"
-        >
-          <label
-            class="app-log-in-screen__card__body__form__input-group__label"
-            >Email:</label
-          >
+        <div class="input-group">
+          <label class="input-group__label">Email:</label>
           <input
             formControlName="email"
-            class="app-log-in-screen__card__body__form__input-group__input"
+            class="input-group__input"
           />
           <div
             *ngIf="
               form.get('email')?.invalid &&
               form.get('email')?.touched
             "
-            class="app-log-in-screen__card__body__form__input-group__error"
+            class="input-group__error"
           >
             <small
               *ngIf="
@@ -46,24 +41,21 @@
           </div>
         </div>
 
-        <div
-          class="app-log-in-screen__card__body__form__input-group"
-        >
-          <label
-            class="app-log-in-screen__card__body__form__input-group__label"
+        <div class="input-group">
+          <label class="input-group__label"
             >Password:</label
           >
           <input
             type="password"
             formControlName="password"
-            class="app-log-in-screen__card__body__form__input-group__input"
+            class="app-log-in-screen__card__body__form input-group__input"
           />
           <div
             *ngIf="
               form.get('password')?.invalid &&
               form.get('password')?.touched
             "
-            class="app-log-in-screen__card__body__form__input-group__error"
+            class="input-group__error"
           >
             <small
               *ngIf="
