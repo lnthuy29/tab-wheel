@@ -1,37 +1,45 @@
+@use '../../styles/styles.scss';
+
 .app-log-in-screen {
-  width: 100%;
-  height: 100%;
-  background-image: linear-gradient(to bottom, var(--color-purple-50) 0%, var(--color-purple-500) 100%);
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
-
-  &__app-name {
-    font-size: 48px;
-    font-weight: bold;
-    color: var(--color-purple-900);
-    margin-top: 32px;
-  }
+  width: 100%;
+  height: 100%;
+  background: var(--color-background);
 
   &__card {
-    height: 80%;
     width: 50%;
-    background: var(--color-white);
+    height: 80%;
     border-radius: 24px 24px 0 0;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    background: var(--color-white);
 
     &__header {
-      background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url("../../assets/images/log-in.jpg");
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      height: 200px;
+      padding-top: 36px;
+      gap: 16px;
+      border-radius: 24px 24px 0 0;
+      background-color: var(--color-primary);
       background-size: cover;
       background-position: left center;
-      border-radius: 24px 24px 0 0;
-      height: 200px;
-      clip-path: path("M0,0 L0,180 Q150,220 300,180 Q450,140 600,180 Q750,220 900,180 L900,0 Z");
+      clip-path: path(
+        'M0,0 L0,180 Q150,220 300,180 Q450,140 600,180 Q750,220 900,180 L900,0 Z'
+      );
+
+      &__app-name {
+        font-weight: bold;
+        color: var(--color-white);
+      }
 
       &__title {
-        padding: 48px;
-        color: var(--color-white);
+        font-weight: 500;
+        color: var(--color-gray-50);
       }
     }
 
@@ -54,39 +62,44 @@
 
           &__input {
             padding: 8px;
-            border: 1px solid #ccc;
+            border: none;
+            border-bottom: 2px solid var(--color-border);
             border-radius: 4px;
-            font-size: 16px;
+
+            &:focus {
+              outline: none;
+              border-bottom: 2px solid var(--color-primary);
+            }
           }
 
           &__error {
+            font-size: var(--font-size-xs);
             color: red;
-            font-size: 12px;
           }
         }
 
         &__submit-button {
-          padding: 12px;
           margin-top: 12px;
-          background-color: var(--color-primary);
-          color: var(--color-white);
+          padding: 12px;
           border: none;
           border-radius: 100px;
+          background-color: var(--color-primary);
+          color: var(--color-white);
+          font-size: var(--font-size-lg);
+          font-weight: 600;
           cursor: pointer;
-          font-size: 16px;
 
           &:hover {
             filter: brightness(120%);
           }
 
           &:disabled {
-            filter: none;
             background-color: var(--color-disabled);
             cursor: not-allowed;
+            filter: none;
           }
         }
       }
     }
   }
 }
-
