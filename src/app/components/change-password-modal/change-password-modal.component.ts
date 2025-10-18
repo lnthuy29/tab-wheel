@@ -5,4 +5,14 @@ import { Component } from '@angular/core';
   templateUrl: './change-password-modal.component.html',
   styleUrl: './change-password-modal.component.scss',
 })
-export class ChangePasswordModalComponent {}
+export class ChangePasswordModalComponent {
+  isVisible = false;
+
+  open() {
+    this.isVisible = true;
+  }
+
+  close() {
+    this.isVisible = false;
+  }
+}

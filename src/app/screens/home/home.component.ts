@@ -1,6 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/app.state';
+import { ChangePasswordModalComponent } from 'src/app/components/change-password-modal/change-password-modal.component';
+import { ModalComponent } from 'src/app/components/modal/modal.component';
+import { UserProfile } from 'src/app/models/profile.interface';
 import { selectProfile } from 'src/app/store/profile/profile.selector';
 
 @Component({
@@ -9,12 +16,21 @@ import { selectProfile } from 'src/app/store/profile/profile.selector';
   styleUrl: './home.component.scss',
 })
 export class HomeComponent implements OnInit {
+  private profile!: UserProfile;
+  @ViewChild(ChangePasswordModalComponent)
+  modal!: ChangePasswordModalComponent;
   public constructor(private store: Store<AppState>) {}
   public ngOnInit() {
     this.store
       .select(selectProfile)
       .subscribe((profile) => {
-        console.log('Logged in profile:', profile);
+        this.profile = profile!;
+        this.showChangePasswordModalIfNeeded();
       });
+  }
+  private showChangePasswordModalIfNeeded(): void {
+    if (!this.profile.passwordChangedFirstTime) {
+      this.modal.open();
+    }
   }
 }
