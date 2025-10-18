@@ -5,11 +5,11 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { ToastrService } from 'ngx-toastr';
 import { LoadingState } from 'src/app/models/loading-state.enum';
 import { Store } from '@ngrx/store';
 import { setUserProfile } from 'src/app/store/profile/profile.action';
 import { AuthService } from 'src/app/services/auth.service';
+import { ToastService } from 'src/app/services/toast.service';
 
 @Component({
   selector: 'app-log-in-screen',
@@ -36,7 +36,7 @@ export class LogInScreenComponent implements OnInit {
   public constructor(
     private store: Store,
     private router: Router,
-    private toastr: ToastrService,
+    private toastService: ToastService,
     private service: AuthService,
   ) {}
 
@@ -50,6 +50,8 @@ export class LogInScreenComponent implements OnInit {
   }
 
   protected async onSubmit() {
+    this.form.markAllAsTouched();
+
     if (this.form.valid) {
       this.loadingState = LoadingState.LOADING;
 
@@ -60,11 +62,7 @@ export class LogInScreenComponent implements OnInit {
 
       if (error) {
         this.loadingState = LoadingState.INITIAL;
-        this.toastr.error(error.message, undefined, {
-          timeOut: 3000,
-          progressBar: true,
-          positionClass: 'toast-bottom-center',
-        });
+        this.toastService.error(error.message);
         return;
       }
 
@@ -79,7 +77,9 @@ export class LogInScreenComponent implements OnInit {
 
         if (!profile) {
           this.loadingState = LoadingState.ERROR;
-          this.toastr.error('Failed to load user profile');
+          this.toastService.error(
+            'Failed to load user profile',
+          );
           return;
         }
 

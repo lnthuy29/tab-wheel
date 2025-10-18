@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   Component,
   OnInit,
   ViewChild,
@@ -6,7 +7,6 @@ import {
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/app.state';
 import { ChangePasswordModalComponent } from 'src/app/components/change-password-modal/change-password-modal.component';
-import { ModalComponent } from 'src/app/components/modal/modal.component';
 import { UserProfile } from 'src/app/models/profile.interface';
 import { selectProfile } from 'src/app/store/profile/profile.selector';
 
@@ -15,7 +15,9 @@ import { selectProfile } from 'src/app/store/profile/profile.selector';
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent
+  implements OnInit, AfterViewInit
+{
   @ViewChild(ChangePasswordModalComponent)
   public modal!: ChangePasswordModalComponent;
 
@@ -27,14 +29,23 @@ export class HomeComponent implements OnInit {
     this.store
       .select(selectProfile)
       .subscribe((profile) => {
+        console.log(
+          '🚀 ~ HomeComponent ~ ngOnInit ~ profile:',
+          profile,
+        );
         this.profile = profile!;
-        this.showChangePasswordModalIfNeeded();
       });
+  }
+
+  public ngAfterViewInit(): void {
+    this.showChangePasswordModalIfNeeded();
   }
 
   private showChangePasswordModalIfNeeded(): void {
     if (!this.profile.passwordChangedFirstTime) {
       this.modal.open();
+    } else {
+      this.modal.close();
     }
   }
 }

@@ -45,4 +45,58 @@ export class AuthService {
       updatedAt: data.updated_at,
     };
   }
+
+  async validateCurrentPassword(
+    currentPassword: string,
+  ): Promise<boolean> {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    const email = user?.email;
+
+    if (!email) {
+      return false;
+    }
+
+    const { error } =
+      await supabase.auth.signInWithPassword({
+        email,
+        password: currentPassword,
+      });
+
+    if (error) {
+      return false;
+    }
+
+    return true;
+  }
+
+  async updatePasswordForLoggedInUser(newPassword: string) {
+    const { data: userUpdateData, error: userUpdateError } =
+      await supabase.auth.updateUser({
+        password: newPassword,
+      });
+
+    if (userUpdateError) {
+      return { data: null, error: userUpdateError };
+    }
+
+    const userId = userUpdateData.user?.id;
+
+    if (userId) {
+      const { error: profileUpdateError } = await supabase
+        .from(EntityTable.PROFILES)
+        .update({ password_changed_first_time: true })
+        .eq('id', userId);
+
+      if (profileUpdateError) {
+        console.error(
+          'Failed to update password_changed_first_time:',
+          profileUpdateError,
+        );
+      }
+    }
+
+    return { data: userUpdateData, error: null };
+  }
 }
