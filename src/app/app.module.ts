@@ -14,6 +14,7 @@ import { ChangePasswordModalComponent } from './components/change-password-modal
 import { StoreModule } from '@ngrx/store';
 import { profileReducer } from './store/profile/profile.reducer';
 import { HomeComponent } from './screens/home/home.component';
+import { CommonModule } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { HomeComponent } from './screens/home/home.component';
     HomeComponent,
   ],
   imports: [
+    CommonModule,
     BrowserModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,

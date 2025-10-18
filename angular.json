@@ -31,7 +31,8 @@
             ],
             "styles": [
               "src/app/styles/styles.scss",
-              "node_modules/ngx-toastr/toastr.css"
+              "node_modules/ngx-toastr/toastr.css",
+              "node_modules/@mdi/font/css/materialdesignicons.min.css"
             ],
             "scripts": []
           },

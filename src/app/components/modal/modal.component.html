@@ -1,10 +1,24 @@
-<div class="modal-backdrop" (click)="closeModal()">
+<div class="app-modal">
   <div
-    class="modal-content"
+    class="app-modal__card"
+    [ngStyle]="{ width: cardWidth }"
     (click)="$event.stopPropagation()"
   >
-    <h2>Modal Title</h2>
-    <p>This is a centered modal!</p>
-    <button (click)="closeModal()">Close</button>
+    <div class="app-modal__card__header">
+      <h3 class="app-modal__card__header__title">
+        {{ configuration.title }}
+      </h3>
+      <i
+        class="app-modal__card__header__close-button mdi mdi-close"
+      ></i>
+    </div>
+
+    <div class="app-modal__card__content">
+      <ng-content select="[content]"></ng-content>
+    </div>
+
+    <div class="app-modal__card__footer">
+      <button (click)="closeModal()">Cancel</button>
+    </div>
   </div>
 </div>

@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { ModalConfiguration } from '../modal/models/modal.interface';
+import { ModalSize } from '../modal/models/modal-size.enum';
 
 @Component({
   selector: 'app-change-password-modal',
@@ -6,13 +8,19 @@ import { Component } from '@angular/core';
   styleUrl: './change-password-modal.component.scss',
 })
 export class ChangePasswordModalComponent {
-  isVisible = false;
+  public isVisible = false;
 
-  open() {
+  protected modalConfiguration: ModalConfiguration = {
+    title: 'Change password for the first time',
+    onSubmit: () => {},
+    size: ModalSize.MEDIUM,
+  };
+
+  public open() {
     this.isVisible = true;
   }
 
-  close() {
+  public close() {
     this.isVisible = false;
   }
 }
