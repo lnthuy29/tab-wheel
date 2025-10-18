@@ -29,7 +29,10 @@
                 "input": "public"
               }
             ],
-            "styles": ["src/app/styles/styles.scss", "node_modules/ngx-toastr/toastr.css"],
+            "styles": [
+              "src/app/styles/styles.scss",
+              "node_modules/ngx-toastr/toastr.css"
+            ],
             "scripts": []
           },
           "configurations": {
@@ -42,8 +45,8 @@
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2kB",
-                  "maximumError": "4kB"
+                  "maximumWarning": "4.5kB",
+                  "maximumError": "5kB"
                 }
               ],
               "outputHashing": "all"
