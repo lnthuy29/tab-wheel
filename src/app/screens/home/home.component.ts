@@ -4,14 +4,13 @@ import { AppState } from 'src/app/app.state';
 import { selectProfile } from 'src/app/store/profile/profile.selector';
 
 @Component({
-  selector: 'app-protected',
-  templateUrl: './protected.component.html',
-  styleUrl: './protected.component.scss',
+  selector: 'app-home',
+  templateUrl: './home.component.html',
+  styleUrl: './home.component.scss',
 })
-export class ProtectedComponent implements OnInit {
+export class HomeComponent implements OnInit {
   public constructor(private store: Store<AppState>) {}
-
-  public ngOnInit(): void {
+  public ngOnInit() {
     this.store
       .select(selectProfile)
       .subscribe((profile) => {

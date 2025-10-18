@@ -45,7 +45,7 @@ export class LogInScreenComponent implements OnInit {
       data: { session },
     } = await this.logInService.getSession();
     if (session) {
-      this.router.navigate(['/protected']);
+      this.router.navigate(['']);
     }
   }
 
@@ -86,7 +86,7 @@ export class LogInScreenComponent implements OnInit {
       }
 
       this.loadingState = LoadingState.LOADED;
-      this.router.navigate(['/protected']);
+      this.router.navigate(['']);
     }
   }
 }
