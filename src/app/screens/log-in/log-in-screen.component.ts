@@ -6,10 +6,10 @@ import {
   Validators,
 } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { supabase } from '@supabase';
 import { LoadingState } from 'src/app/models/loading-state.enum';
 import { Store } from '@ngrx/store';
 import { setUserProfile } from 'src/app/store/profile/profile.action';
+import { LogInService } from './services/log-in.service';
 
 @Component({
   selector: 'app-log-in-screen',
@@ -37,13 +37,13 @@ export class LogInScreenComponent implements OnInit {
     private store: Store,
     private router: Router,
     private toastr: ToastrService,
+    private logInService: LogInService,
   ) {}
 
   public async ngOnInit(): Promise<void> {
     const {
       data: { session },
-    } = await supabase.auth.getSession();
-
+    } = await this.logInService.getSession();
     if (session) {
       this.router.navigate(['/protected']);
     }
@@ -53,11 +53,10 @@ export class LogInScreenComponent implements OnInit {
     if (this.form.valid) {
       this.loadingState = LoadingState.LOADING;
 
-      const { data: authData, error } =
-        await supabase.auth.signInWithPassword({
-          email: this.form.value.email!,
-          password: this.form.value.password!,
-        });
+      const { error } = await this.logInService.signIn(
+        this.form.value.email!,
+        this.form.value.password!,
+      );
 
       if (error) {
         this.loadingState = LoadingState.INITIAL;
@@ -71,37 +70,19 @@ export class LogInScreenComponent implements OnInit {
 
       const {
         data: { user },
-      } = await supabase.auth.getUser();
+      } = await this.logInService.getUser();
 
       if (user) {
-        const { data: profileData, error: profileError } =
-          await supabase
-            .from('profiles')
-            .select('*')
-            .eq('id', user.id)
-            .single();
+        const profile =
+          await this.logInService.getUserProfile(user.id);
 
-        if (profileError || !profileData) {
+        if (!profile) {
+          this.loadingState = LoadingState.ERROR;
           this.toastr.error('Failed to load user profile');
-          this.loadingState = LoadingState.INITIAL;
           return;
         }
 
-        // Dispatch to NgRx store
-        this.store.dispatch(
-          setUserProfile({
-            profile: {
-              id: profileData.id,
-              displayName: profileData.display_name,
-              avatarPath: profileData.avatar_path,
-              employeeRoleId: profileData.employee_role_id,
-              passwordChangedFirstTime:
-                profileData.password_changed_first_time,
-              createdAt: profileData.created_at,
-              updatedAt: profileData.updated_at,
-            },
-          }),
-        );
+        this.store.dispatch(setUserProfile({ profile }));
       }
 
       this.loadingState = LoadingState.LOADED;
