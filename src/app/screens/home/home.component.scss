@@ -32,16 +32,30 @@
           border-radius: 4px;
           gap: 8px;
 
+          > * {
+            color: var(--color-white);
+            filter: brightness(80%);
+          }
+
+          &__icon {
+            font-size: var(--font-size-2xl);
+          }
+
+          &__image {
+            width: 1.5rem;
+            height: 1.5rem;
+            border-radius: 50%;
+            object-fit: cover;
+          }
+
+          &__text {
+            font-size: var(--font-size-base);
+          }
+
           &:hover {
             > * {
               filter: brightness(100%);
             }
-          }
-
-          > * {
-            color: var(--color-white);
-            font-size: var(--font-size-sm);
-            filter: brightness(80%);
           }
 
           &--active {

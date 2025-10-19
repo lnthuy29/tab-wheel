@@ -1,22 +1,59 @@
-import { Component } from '@angular/core';
+import {
+  Component,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import {
   bottomNavigationItems,
   topNavigationItems,
 } from './home-routing.module';
+import { Subscription } from 'rxjs';
+import { Nullable } from 'src/app/models/nullable.type';
+import { UserProfile } from 'src/app/models/profile.interface';
+import { AppState } from 'src/app/store/app.state';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit, OnDestroy {
+  protected profile!: Nullable<UserProfile>;
+
   protected topNavigationItems: any[] = topNavigationItems;
   protected bottomNavigationItems: any[] =
     bottomNavigationItems;
 
   protected isSidebarExpanded: boolean = true;
 
+  protected isImageLoading: boolean = true;
+
+  private profileSub!: Subscription;
+
+  public constructor(private store: Store<AppState>) {}
+
+  public ngOnInit(): void {
+    this.loadUserProfile();
+  }
+
   protected toggleSidebar(): void {
     this.isSidebarExpanded = !this.isSidebarExpanded;
+  }
+
+  protected onImageLoad() {
+    this.isImageLoading = false;
+  }
+
+  private loadUserProfile() {
+    this.profileSub = this.store
+      .select((state) => state.profile)
+      .subscribe((profile) => {
+        this.profile = profile;
+      });
+  }
+
+  public ngOnDestroy(): void {
+    this.profileSub?.unsubscribe();
   }
 }

@@ -54,6 +54,37 @@
           </li>
         </ul>
 
+        <a
+          routerLink="settings"
+          routerLinkActive="app-home__sidebar__nav__list__item--active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          class="app-home__sidebar__nav__list__item"
+        >
+          <div class="avatar-wrapper">
+            <div
+              *ngIf="isImageLoading"
+              class="spinner"
+            ></div>
+
+            <img
+              class="app-home__sidebar__nav__list__item__image"
+              [src]="
+                profile?.avatarPath ??
+                'https://ui-avatars.com/api/?name=' +
+                  profile?.displayName
+              "
+              (load)="onImageLoad()"
+              [hidden]="isImageLoading"
+            />
+          </div>
+
+          <span
+            class="app-home__sidebar__nav__list__item__text"
+            *ngIf="isSidebarExpanded"
+            >{{ profile?.displayName }}
+          </span>
+        </a>
+
         <button
           class="app-home__sidebar__nav__toggle"
           type="button"
