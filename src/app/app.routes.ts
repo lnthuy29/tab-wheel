@@ -1,21 +1,16 @@
 import { Routes } from '@angular/router';
 import { AuthGuard } from './guards/auth.guard';
 import { LogInScreenComponent } from './screens/log-in/log-in-screen.component';
-import { ProtectedComponent } from './screens/protected/protected.component';
-import { RedirectComponent } from './components/redirect/redirect.component';
+import { HomeComponent } from './screens/home/home.component';
 
 export const routes: Routes = [
-  { 
-    path: 'log-in', 
-    component: LogInScreenComponent 
+  {
+    path: 'log-in',
+    component: LogInScreenComponent,
   },
   {
-    path: 'protected',
-    component: ProtectedComponent,
+    path: '',
+    component: HomeComponent,
     canActivate: [AuthGuard],
-  },
-  { 
-    path: '', 
-    component: RedirectComponent 
   },
 ];

@@ -1,0 +1,32 @@
+<div class="app-modal animation-float-in">
+  <div
+    class="app-modal__card"
+    [ngStyle]="{ width: cardWidth }"
+    (click)="$event.stopPropagation()"
+  >
+    <div class="app-modal__card__header">
+      <div class="app-modal__card__header__title-area">
+        <h3
+          class="app-modal__card__header__title-area__title"
+        >
+          {{ configuration.title }}
+        </h3>
+        <i
+          *ngIf="configuration.showCloseButton !== false"
+          (click)="closeModal()"
+          class="app-modal__card__header__title-area__close-button mdi mdi-close"
+        ></i>
+      </div>
+      <div
+        class="app-modal__card__header__subtitle"
+        *ngIf="configuration.subtitle"
+      >
+        {{ configuration.subtitle }}
+      </div>
+    </div>
+
+    <div class="app-modal__card__content">
+      <ng-content select="[content]"></ng-content>
+    </div>
+  </div>
+</div>
