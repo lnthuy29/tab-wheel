@@ -13,16 +13,22 @@ import { ModalComponent } from './components/modal/modal.component';
 import { ChangePasswordModalComponent } from './components/change-password-modal/change-password-modal.component';
 import { StoreModule } from '@ngrx/store';
 import { profileReducer } from './store/profile/profile.reducer';
-import { HomeComponent } from './screens/home/home.component';
+import { HomeScreenComponent } from './screens/home/home-screen.component';
 import { CommonModule } from '@angular/common';
 import { HomeRoutingModule } from './screens/home/home-routing.module';
+import { DashboardScreenComponent } from './screens/dashboard/dashboard-screen.component';
+import { DonationScreenComponent } from './screens/donation/donation-screen.component';
+import { SettingsScreenComponent } from './screens/settings/settings-screen.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LogInScreenComponent,
     ChangePasswordModalComponent,
-    HomeComponent,
+    HomeScreenComponent,
+    DashboardScreenComponent,
+    DonationScreenComponent,
+    SettingsScreenComponent,
   ],
   imports: [
     CommonModule,

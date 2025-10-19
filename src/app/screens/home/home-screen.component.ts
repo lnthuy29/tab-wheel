@@ -14,11 +14,13 @@ import { AppState } from 'src/app/store/app.state';
 import { Store } from '@ngrx/store';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrl: './home.component.scss',
+  selector: 'app-home-screen',
+  templateUrl: './home-screen.component.html',
+  styleUrl: './home-screen.component.scss',
 })
-export class HomeComponent implements OnInit, OnDestroy {
+export class HomeScreenComponent
+  implements OnInit, OnDestroy
+{
   protected profile!: Nullable<UserProfile>;
 
   protected topNavigationItems: any[] = topNavigationItems;

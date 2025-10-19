@@ -1,16 +1,16 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { HomeComponent } from './home.component';
-import { DashboardComponent } from '../dashboard/dashboard.component';
-import { SettingsComponent } from '../settings/settings.component';
-import { DonationComponent } from '../donation/donation.component';
+import { HomeScreenComponent } from './home-screen.component';
+import { DashboardScreenComponent } from '../dashboard/dashboard-screen.component';
+import { SettingsScreenComponent } from '../settings/settings-screen.component';
+import { DonationScreenComponent } from '../donation/donation-screen.component';
 
 export const topNavigationItems: any[] = [
   {
     label: 'Dashboard',
     path: '/dashboard',
     icon: 'home',
-    component: DashboardComponent,
+    component: DashboardScreenComponent,
   },
 ];
 
@@ -19,14 +19,14 @@ export const bottomNavigationItems: any[] = [
     label: 'Buy me a drink',
     path: '/buy-me-a-drink',
     icon: 'beer',
-    component: DonationComponent,
+    component: DonationScreenComponent,
   },
 ];
 
 const routes: Routes = [
   {
     path: '',
-    component: HomeComponent,
+    component: HomeScreenComponent,
     children: [
       ...topNavigationItems.map((item) => ({
         path: item.path.replace('/', ''),
@@ -38,7 +38,7 @@ const routes: Routes = [
       })),
       {
         path: 'settings',
-        component: SettingsComponent,
+        component: SettingsScreenComponent,
       },
       {
         path: '',
