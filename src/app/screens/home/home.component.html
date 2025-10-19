@@ -1,5 +1,18 @@
 <div class="app-home">
   <aside class="app-home__sidebar">
+    <div class="app-home__sidebar__logo">
+      <img
+        class="app-home__sidebar__nav__list__item__image"
+        src="./logo.png"
+      />
+
+      <span
+        class="app-home__sidebar__nav__list__item__text"
+        *ngIf="isSidebarExpanded"
+        >Tab Wheel
+      </span>
+    </div>
+
     <nav class="app-home__sidebar__nav">
       <ul
         class="app-home__sidebar__nav__list"
@@ -81,7 +94,7 @@
           <span
             class="app-home__sidebar__nav__list__item__text"
             *ngIf="isSidebarExpanded"
-            >{{ profile?.displayName }}
+            >{{ profile?.displayName ?? 'Loading...' }}
           </span>
         </a>
 
