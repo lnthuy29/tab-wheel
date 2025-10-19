@@ -1,38 +1,38 @@
-<div class="app-home">
-  <aside class="app-home__sidebar">
-    <div class="app-home__sidebar__logo">
+<div class="app-home-screen">
+  <aside class="app-home-screen__sidebar">
+    <div class="app-home-screen__sidebar__logo">
       <img
-        class="app-home__sidebar__nav__list__item__image"
+        class="app-home-screen__sidebar__nav__list__item__image"
         src="./logo.png"
       />
 
       <span
-        class="app-home__sidebar__nav__list__item__text"
+        class="app-home-screen__sidebar__nav__list__item__text"
         *ngIf="isSidebarExpanded"
         >Tab Wheel
       </span>
     </div>
 
-    <nav class="app-home__sidebar__nav">
+    <nav class="app-home-screen__sidebar__nav">
       <ul
-        class="app-home__sidebar__nav__list"
+        class="app-home-screen__sidebar__nav__list"
         *ngFor="let item of topNavigationItems"
       >
         <li>
           <a
             routerLink="{{ item.path }}"
-            routerLinkActive="app-home__sidebar__nav__list__item--active"
+            routerLinkActive="app-home-screen__sidebar__nav__list__item--active"
             [routerLinkActiveOptions]="{ exact: true }"
-            class="app-home__sidebar__nav__list__item"
+            class="app-home-screen__sidebar__nav__list__item"
           >
             <span
-              class="app-home__sidebar__nav__list__item__icon mdi mdi-{{
+              class="app-home-screen__sidebar__nav__list__item__icon mdi mdi-{{
                 item.icon
               }}"
               aria-hidden="true"
             ></span>
             <span
-              class="app-home__sidebar__nav__list__item__text"
+              class="app-home-screen__sidebar__nav__list__item__text"
               *ngIf="isSidebarExpanded"
               >{{ item.label }}</span
             >
@@ -42,24 +42,24 @@
 
       <div>
         <ul
-          class="app-home__sidebar__nav__list"
+          class="app-home-screen__sidebar__nav__list"
           *ngFor="let item of bottomNavigationItems"
         >
           <li>
             <a
               routerLink="{{ item.path }}"
-              routerLinkActive="app-home__sidebar__nav__list__item--active"
+              routerLinkActive="app-home-screen__sidebar__nav__list__item--active"
               [routerLinkActiveOptions]="{ exact: true }"
-              class="app-home__sidebar__nav__list__item"
+              class="app-home-screen__sidebar__nav__list__item"
             >
               <span
-                class="app-home__sidebar__nav__list__item__icon mdi mdi-{{
+                class="app-home-screen__sidebar__nav__list__item__icon mdi mdi-{{
                   item.icon
                 }}"
                 aria-hidden="true"
               ></span>
               <span
-                class="app-home__sidebar__nav__list__item__text"
+                class="app-home-screen__sidebar__nav__list__item__text"
                 *ngIf="isSidebarExpanded"
                 >{{ item.label }}
               </span>
@@ -69,9 +69,9 @@
 
         <a
           routerLink="settings"
-          routerLinkActive="app-home__sidebar__nav__list__item--active"
+          routerLinkActive="app-home-screen__sidebar__nav__list__item--active"
           [routerLinkActiveOptions]="{ exact: true }"
-          class="app-home__sidebar__nav__list__item"
+          class="app-home-screen__sidebar__nav__list__item"
         >
           <div class="avatar-wrapper">
             <div
@@ -80,7 +80,7 @@
             ></div>
 
             <img
-              class="app-home__sidebar__nav__list__item__image"
+              class="app-home-screen__sidebar__nav__list__item__image"
               [src]="
                 profile?.avatarPath ??
                 'https://ui-avatars.com/api/?name=' +
@@ -92,20 +92,22 @@
           </div>
 
           <span
-            class="app-home__sidebar__nav__list__item__text"
+            class="app-home-screen__sidebar__nav__list__item__text"
             *ngIf="isSidebarExpanded"
             >{{ profile?.displayName ?? 'Loading...' }}
           </span>
         </a>
 
         <button
-          class="app-home__sidebar__nav__toggle"
+          class="app-home-screen__sidebar__nav__toggle"
           type="button"
           (click)="isSidebarExpanded = !isSidebarExpanded"
         >
-          <div class="app-home__sidebar__nav__list__item">
+          <div
+            class="app-home-screen__sidebar__nav__list__item"
+          >
             <span
-              class="app-home__sidebar__nav__list__item__icon mdi mdi-{{
+              class="app-home-screen__sidebar__nav__list__item__icon mdi mdi-{{
                 isSidebarExpanded
                   ? 'arrow-collapse-left'
                   : 'arrow-collapse-right'
@@ -114,7 +116,7 @@
             </span>
 
             <span
-              class="app-home__sidebar__nav__list__item__text"
+              class="app-home-screen__sidebar__nav__list__item__text"
               *ngIf="isSidebarExpanded"
               >Collapse
             </span>
@@ -124,7 +126,7 @@
     </nav>
   </aside>
 
-  <main class="app-home__main">
+  <main class="app-home-screen__main">
     <router-outlet></router-outlet>
   </main>
 </div>

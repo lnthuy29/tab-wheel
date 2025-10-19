@@ -1,0 +1,55 @@
+<div class="profile-details-section">
+  <div class="profile-details-section__avatar">
+    <div class="profile-details-section__avatar-preview">
+      <img
+        class="profile-details-section__avatar-img"
+        [src]="
+          profile?.avatarUrl ||
+          'assets/images/default-avatar.svg'
+        "
+        alt="Profile avatar"
+      />
+      <div
+        class="profile-details-section__avatar-initials"
+        *ngIf="!profile?.avatarUrl && profile?.displayName"
+      >
+        {{ profile.displayName.charAt(0).toUpperCase() }}
+      </div>
+    </div>
+
+    <label
+      class="profile-details-section__avatar-upload"
+      for="avatarInput"
+    >
+      <input
+        id="avatarInput"
+        type="file"
+        accept="image/*"
+        (change)="onAvatarSelected($event)"
+        hidden
+      />
+      <span
+        class="profile-details-section__avatar-upload-btn"
+        >Upload image</span
+      >
+    </label>
+  </div>
+
+  <div class="profile-details-section__field">
+    <label
+      class="profile-details-section__label"
+      for="displayName"
+      >Display name</label
+    >
+    <input
+      id="displayName"
+      class="profile-details-section__input"
+      type="text"
+      name="displayName"
+      [(ngModel)]="profile.displayName"
+      maxlength="50"
+      placeholder="Enter display name"
+      aria-label="Display name"
+    />
+  </div>
+</div>

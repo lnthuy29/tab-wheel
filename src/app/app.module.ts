@@ -19,6 +19,9 @@ import { HomeRoutingModule } from './screens/home/home-routing.module';
 import { DashboardScreenComponent } from './screens/dashboard/dashboard-screen.component';
 import { DonationScreenComponent } from './screens/donation/donation-screen.component';
 import { SettingsScreenComponent } from './screens/settings/settings-screen.component';
+import { ChangePasswordSectionComponent } from './screens/settings/sections/change-password/change-password-section.component';
+import { SignOutSectionComponent } from './screens/settings/sections/sign-out-section/sign-out-section.component';
+import { ProfileDetailsSectionComponent } from './screens/settings/sections/profile-details-section/profile-details-section.component';
 
 @NgModule({
   declarations: [
@@ -29,15 +32,18 @@ import { SettingsScreenComponent } from './screens/settings/settings-screen.comp
     DashboardScreenComponent,
     DonationScreenComponent,
     SettingsScreenComponent,
+    ProfileDetailsSectionComponent,
+    ChangePasswordSectionComponent,
+    SignOutSectionComponent,
   ],
   imports: [
     CommonModule,
     BrowserModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,
+    StoreModule.forRoot({ profile: profileReducer }),
     AppRoutingModule,
     HomeRoutingModule,
-    StoreModule.forRoot({ profile: profileReducer }),
     ModalComponent,
   ],
   providers: [provideAnimations(), provideToastr()],

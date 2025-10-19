@@ -1,1 +1,18 @@
-<p>settings works!</p>
+<div class="app-settings-screen">
+  <h1 class="app-settings-screen__title">
+    Profile settings
+  </h1>
+  <div class="app-settings-screen__body">
+    <app-profile-details-section />
+    <div
+      style="
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      "
+    >
+      <app-change-password-section />
+      <app-sign-out-section />
+    </div>
+  </div>
+</div>

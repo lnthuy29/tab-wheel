@@ -1,0 +1,11 @@
+.app-settings-screen {
+  &__body {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+
+    > * {
+      flex: 1;
+    }
+  }
+}
