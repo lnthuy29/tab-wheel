@@ -19,7 +19,7 @@ import { LoadingState } from 'src/app/models/loading-state.enum';
 import { Nullable } from 'src/app/models/nullable.type';
 import { selectProfile } from 'src/app/store/profile/profile.selector';
 import { UserProfile } from 'src/app/models/profile.interface';
-import { AppState } from 'src/app/app.state';
+import { AppState } from 'src/app/store/app.state';
 import { setUserProfile } from 'src/app/store/profile/profile.action';
 import { ToastService } from 'src/app/services/toast.service';
 

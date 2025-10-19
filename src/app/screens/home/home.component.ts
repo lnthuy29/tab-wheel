@@ -5,7 +5,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { AppState } from 'src/app/app.state';
+import { AppState } from 'src/app/store/app.state';
 import { ChangePasswordModalComponent } from 'src/app/components/change-password-modal/change-password-modal.component';
 import { Nullable } from 'src/app/models/nullable.type';
 import { UserProfile } from 'src/app/models/profile.interface';

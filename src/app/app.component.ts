@@ -4,7 +4,7 @@ import {
   ViewChild,
   OnDestroy,
 } from '@angular/core';
-import { AppState } from './app.state';
+import { AppState } from './store/app.state';
 import { Store } from '@ngrx/store';
 import { AuthService } from './services/auth.service';
 import { setUserProfile } from './store/profile/profile.action';
