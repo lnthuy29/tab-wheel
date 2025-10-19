@@ -43,13 +43,31 @@ export class ChangePasswordModalComponent {
     control: AbstractControl,
   ): Nullable<ValidationErrors> => {
     const newPassword = control.get('new')?.value;
-    const retypedPassword = control.get('retyped')?.value;
+    const retypedControl = control.get('retyped');
 
-    return newPassword &&
-      retypedPassword &&
-      newPassword !== retypedPassword
-      ? { mismatch: true }
-      : null;
+    const mismatch =
+      newPassword &&
+      retypedControl?.value &&
+      newPassword !== retypedControl.value;
+
+    if (mismatch) {
+      // add mismatch error to the retyped control without clobbering other errors
+      const existing = retypedControl?.errors ?? {};
+      retypedControl?.setErrors({
+        ...existing,
+        mismatch: true,
+      });
+      return { mismatch: true };
+    } else {
+      // remove mismatch error from the retyped control if present
+      if (retypedControl?.errors) {
+        const { mismatch: _m, ...rest } =
+          retypedControl.errors;
+        const hasOther = Object.keys(rest).length > 0;
+        retypedControl.setErrors(hasOther ? rest : null);
+      }
+      return null;
+    }
   };
 
   protected form: FormGroup = new FormGroup(
