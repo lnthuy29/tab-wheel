@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { supabase } from '@supabase';
+import { UserResponse } from '@supabase/supabase-js';
 import { EntityTable } from 'src/app/models/entity.enum';
 import { Nullable } from 'src/app/models/nullable.type';
 import { UserProfile } from 'src/app/models/profile.interface';
@@ -19,7 +20,7 @@ export class AuthService {
     });
   }
 
-  async getUser() {
+  async getUser(): Promise<UserResponse> {
     return await supabase.auth.getUser();
   }
 
