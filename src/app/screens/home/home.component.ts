@@ -33,15 +33,6 @@ export class HomeComponent implements OnInit {
       .select(selectProfile)
       .subscribe((profile: Nullable<UserProfile>) => {
         this.profile = profile!;
-        this.showChangePasswordModalIfNeeded();
       });
-  }
-
-  private showChangePasswordModalIfNeeded(): void {
-    if (!this.profile?.passwordChangedFirstTime) {
-      this.modal?.open();
-    } else {
-      this.modal?.close();
-    }
   }
 }
