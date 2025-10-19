@@ -15,6 +15,7 @@ import { StoreModule } from '@ngrx/store';
 import { profileReducer } from './store/profile/profile.reducer';
 import { HomeComponent } from './screens/home/home.component';
 import { CommonModule } from '@angular/common';
+import { HomeRoutingModule } from './screens/home/home-routing.module';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { CommonModule } from '@angular/common';
     BrowserAnimationsModule,
     ReactiveFormsModule,
     AppRoutingModule,
+    HomeRoutingModule,
     StoreModule.forRoot({ profile: profileReducer }),
     ModalComponent,
   ],

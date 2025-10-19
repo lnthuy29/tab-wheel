@@ -1,38 +1,22 @@
+import { Component } from '@angular/core';
 import {
-  AfterViewInit,
-  Component,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
-import { Store } from '@ngrx/store';
-import { AppState } from 'src/app/store/app.state';
-import { ChangePasswordModalComponent } from 'src/app/components/change-password-modal/change-password-modal.component';
-import { Nullable } from 'src/app/models/nullable.type';
-import { UserProfile } from 'src/app/models/profile.interface';
-import { selectProfile } from 'src/app/store/profile/profile.selector';
+  bottomNavigationItems,
+  topNavigationItems,
+} from './home-routing.module';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
-export class HomeComponent implements OnInit {
-  @ViewChild(ChangePasswordModalComponent)
-  public modal!: ChangePasswordModalComponent;
+export class HomeComponent {
+  protected topNavigationItems: any[] = topNavigationItems;
+  protected bottomNavigationItems: any[] =
+    bottomNavigationItems;
 
-  private profile!: UserProfile;
+  protected isSidebarExpanded: boolean = true;
 
-  public constructor(private store: Store<AppState>) {}
-
-  public ngOnInit(): void {
-    this.loadUserProfile();
-  }
-
-  private loadUserProfile(): void {
-    this.store
-      .select(selectProfile)
-      .subscribe((profile: Nullable<UserProfile>) => {
-        this.profile = profile!;
-      });
+  protected toggleSidebar(): void {
+    this.isSidebarExpanded = !this.isSidebarExpanded;
   }
 }

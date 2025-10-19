@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LogInScreenComponent } from './screens/log-in/log-in-screen.component';
-import { HomeComponent } from './screens/home/home.component';
 import { AuthGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
@@ -11,8 +10,11 @@ export const routes: Routes = [
   },
   {
     path: '',
-    component: HomeComponent,
     canActivate: [AuthGuard],
+    loadChildren: () =>
+      import('./screens/home/home-routing.module').then(
+        (m) => m.HomeRoutingModule,
+      ),
   },
 ];
 

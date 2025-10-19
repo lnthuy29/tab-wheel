@@ -3,32 +3,63 @@
 .app-home {
   display: flex;
   height: 100vh;
-  font-family: system-ui, Arial, sans-serif;
 
   &__sidebar {
-    width: 240px;
-    background: #2b2f3a;
-    color: #fff;
+    width: max-content;
+    transition: width 0.3s ease;
+    background: var(--color-primary);
+    color: var(--color-white);
     padding: 1rem;
     box-sizing: border-box;
-    > nav {
-      > ul {
+
+    &__nav {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: space-between;
+      height: 100%;
+
+      &__list {
         list-style: none;
         margin: 0;
         padding: 0;
-        > li {
-          margin: 0.5rem 0;
-          > a {
-            color: inherit;
-            text-decoration: none;
-            display: block;
-            padding: 0.4rem 0.2rem;
-            border-radius: 4px;
+
+        &__item {
+          text-decoration: none;
+          display: flex;
+          align-items: center;
+          padding: 0.4rem 0.2rem;
+          border-radius: 4px;
+          gap: 8px;
+
+          &:hover {
+            > * {
+              filter: brightness(100%);
+            }
           }
-          > a:hover {
-            background: rgba(255, 255, 255, 0.05);
+
+          > * {
+            color: var(--color-white);
+            font-size: var(--font-size-sm);
+            filter: brightness(80%);
+          }
+
+          &--active {
+            > * {
+              filter: brightness(100%);
+            }
           }
         }
+      }
+
+      &__toggle {
+        background: none;
+        border: none;
+        padding: 0;
+        color: inherit;
+        cursor: pointer;
+        margin-top: 1rem;
+        font-family: 'Montserrat', sans-serif;
       }
     }
   }
@@ -36,7 +67,7 @@
   &__main {
     flex: 1;
     padding: 1rem;
-    background: #f5f7fa;
+    background: var(--color-background);
     box-sizing: border-box;
     overflow: auto;
   }
@@ -48,6 +79,10 @@
 
     &__sidebar {
       width: 100%;
+
+      &.expanded {
+        width: 100%;
+      }
     }
   }
 }
