@@ -1,55 +1,74 @@
-<div class="profile-details-section">
-  <div class="profile-details-section__avatar">
-    <div class="profile-details-section__avatar-preview">
+<div class="app-profile-details-section">
+  <h3 class="app-profile-details-section__header">
+    Profile details
+  </h3>
+  <ng-container
+    class="app-profile-details-section__body"
+    *ngIf="profile; else fetching"
+  >
+    <div class="app-profile-details-section__body__avatar">
       <img
-        class="profile-details-section__avatar-img"
+        class="app-profile-details-section__body__avatar__image"
         [src]="
-          profile?.avatarUrl ||
+          profile.avatarPath ||
           'assets/images/default-avatar.svg'
         "
         alt="Profile avatar"
       />
-      <div
-        class="profile-details-section__avatar-initials"
-        *ngIf="!profile?.avatarUrl && profile?.displayName"
+
+      <label
+        class="app-profile-details-section__body__avatar__upload"
+        for="avatarInput"
       >
-        {{ profile.displayName.charAt(0).toUpperCase() }}
-      </div>
+        <input
+          id="avatarInput"
+          type="file"
+          accept="image/*"
+          (change)="onAvatarSelected($event)"
+          hidden
+        />
+        <span
+          class="profile-details-section__body__avatar__upload-button"
+          >Upload image</span
+        >
+      </label>
     </div>
 
-    <label
-      class="profile-details-section__avatar-upload"
-      for="avatarInput"
+    <form
+      [formGroup]="form"
+      (ngSubmit)="onSubmit()"
+      class="app-profile-details-section__body__form"
     >
-      <input
-        id="avatarInput"
-        type="file"
-        accept="image/*"
-        (change)="onAvatarSelected($event)"
-        hidden
+      <app-form-field
+        label="Display name"
+        [control]="displayNameControl"
+        type="text"
       />
-      <span
-        class="profile-details-section__avatar-upload-btn"
-        >Upload image</span
-      >
-    </label>
-  </div>
 
-  <div class="profile-details-section__field">
-    <label
-      class="profile-details-section__label"
-      for="displayName"
-      >Display name</label
-    >
-    <input
-      id="displayName"
-      class="profile-details-section__input"
-      type="text"
-      name="displayName"
-      [(ngModel)]="profile.displayName"
-      maxlength="50"
-      placeholder="Enter display name"
-      aria-label="Display name"
-    />
-  </div>
+      <button
+        type="submit"
+        [disabled]="isSubmitDisabled"
+        class="app-profile-details-section__body__form__submit-button"
+      >
+        <ng-container
+          *ngIf="
+            loadingState !== LoadingState.LOADING;
+            else submitting
+          "
+        >
+          Update profile
+        </ng-container>
+      </button>
+    </form>
+  </ng-container>
 </div>
+
+<ng-template #fetching>
+  <div class="app-profile-details-section__body--loading">
+    <div class="skeleton" style="height: 250px"></div>
+  </div>
+</ng-template>
+
+<ng-template #submitting>
+  <span class="spinner"></span>
+</ng-template>

@@ -1,0 +1,23 @@
+<div class="input-group">
+  <label class="input-group__label">{{ label }}</label>
+  <input
+    [type]="type"
+    class="input-group__input"
+    [formControl]="control"
+  />
+  <div
+    *ngIf="
+      control.invalid && (control.touched || control.dirty)
+    "
+    class="input-group__error"
+  >
+    <small *ngIf="control.errors?.['minlength']">
+      Must be at least
+      {{ control.errors?.['minlength'].requiredLength }}
+      characters
+    </small>
+    <small *ngIf="control.errors?.['required']"
+      >Required</small
+    >
+  </div>
+</div>

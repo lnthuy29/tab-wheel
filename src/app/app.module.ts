@@ -19,9 +19,10 @@ import { HomeRoutingModule } from './screens/home/home-routing.module';
 import { DashboardScreenComponent } from './screens/dashboard/dashboard-screen.component';
 import { DonationScreenComponent } from './screens/donation/donation-screen.component';
 import { SettingsScreenComponent } from './screens/settings/settings-screen.component';
-import { ChangePasswordSectionComponent } from './screens/settings/sections/change-password/change-password-section.component';
+import { ChangePasswordSectionComponent } from './screens/settings/sections/change-password-section/change-password-section.component';
 import { SignOutSectionComponent } from './screens/settings/sections/sign-out-section/sign-out-section.component';
 import { ProfileDetailsSectionComponent } from './screens/settings/sections/profile-details-section/profile-details-section.component';
+import { FormFieldComponent } from './components/form-field/form-field.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { ProfileDetailsSectionComponent } from './screens/settings/sections/prof
     ProfileDetailsSectionComponent,
     ChangePasswordSectionComponent,
     SignOutSectionComponent,
+    FormFieldComponent,
   ],
   imports: [
     CommonModule,

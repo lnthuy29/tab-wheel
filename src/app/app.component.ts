@@ -57,7 +57,6 @@ export class AppComponent implements OnInit, OnDestroy {
 
   private showChangePasswordModalIfNeeded(): void {
     if (!this.profile?.passwordChangedFirstTime) {
-      console.log('Open modal');
       this.modal?.open();
     } else {
       this.modal?.close();

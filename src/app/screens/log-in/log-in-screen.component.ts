@@ -1,12 +1,11 @@
-import { Router } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
-import {
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
-import { LoadingState } from 'src/app/models/loading-state.enum';
+import { Component } from '@angular/core';
+import { OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
+import { Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
+import { Router } from '@angular/router';
+import { LoadingState } from 'src/app/models/loading-state.enum';
 import { setUserProfile } from 'src/app/store/profile/profile.action';
 import { AuthService } from 'src/app/services/auth.service';
 import { ToastService } from 'src/app/services/toast.service';

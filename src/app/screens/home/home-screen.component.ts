@@ -21,7 +21,7 @@ import { Store } from '@ngrx/store';
 export class HomeScreenComponent
   implements OnInit, OnDestroy
 {
-  protected profile!: Nullable<UserProfile>;
+  protected profile: Nullable<UserProfile> = null;
 
   protected topNavigationItems: any[] = topNavigationItems;
   protected bottomNavigationItems: any[] =
@@ -31,7 +31,7 @@ export class HomeScreenComponent
 
   protected isImageLoading: boolean = true;
 
-  private profileSub!: Subscription;
+  private subscription: Subscription = new Subscription();
 
   public constructor(private store: Store<AppState>) {}
 
@@ -48,7 +48,7 @@ export class HomeScreenComponent
   }
 
   private loadUserProfile() {
-    this.profileSub = this.store
+    this.subscription = this.store
       .select((state) => state.profile)
       .subscribe((profile) => {
         this.profile = profile;
@@ -56,6 +56,6 @@ export class HomeScreenComponent
   }
 
   public ngOnDestroy(): void {
-    this.profileSub?.unsubscribe();
+    this.subscription?.unsubscribe();
   }
 }
