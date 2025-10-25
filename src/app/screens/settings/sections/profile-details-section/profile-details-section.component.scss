@@ -17,6 +17,9 @@
         object-fit: cover;
         margin-bottom: 8px;
       }
+      &__upload {
+        cursor: pointer;
+      }
     }
     &__form {
       display: flex;

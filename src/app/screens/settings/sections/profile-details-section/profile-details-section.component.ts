@@ -13,7 +13,10 @@ import { Subscription } from 'rxjs';
 import { LoadingState } from 'src/app/models/loading-state.enum';
 import { Nullable } from 'src/app/models/nullable.type';
 import { UserProfile } from 'src/app/models/profile.interface';
+import { AuthService } from 'src/app/services/auth.service';
+import { ToastService } from 'src/app/services/toast.service';
 import { AppState } from 'src/app/store/app.state';
+import { setUserProfile } from 'src/app/store/profile/profile.action';
 
 @Component({
   selector: 'app-profile-details-section',
@@ -38,7 +41,11 @@ export class ProfileDetailsSectionComponent
     ]),
   });
 
-  public constructor(private store: Store<AppState>) {}
+  public constructor(
+    private store: Store<AppState>,
+    private service: AuthService,
+    private toastService: ToastService,
+  ) {}
 
   public ngOnInit(): void {
     this.loadUserProfile();
@@ -49,11 +56,9 @@ export class ProfileDetailsSectionComponent
   }
 
   protected get displayNameControl(): FormControl<string> {
-    const control = this.form.controls[
+    return this.form.controls[
       'displayName'
     ] as FormControl<string>;
-    console.log(control);
-    return control;
   }
 
   protected onAvatarSelected(event: Event): void {
@@ -94,13 +99,38 @@ export class ProfileDetailsSectionComponent
     return invalid || loading || !hasChanges;
   }
 
-  protected async onSubmit() {
+  protected async onSubmit(): Promise<void> {
     this.form.markAllAsTouched();
+
     if (this.form.valid) {
       this.loadingState = LoadingState.LOADING;
-      // Dispatch update profile action here
-      // await this.store.dispatch(updateUserProfile({ ... }));
-      this.loadingState = LoadingState.INITIAL;
+
+      const updatedProfile: Partial<UserProfile> = {
+        id: this.profile!.id,
+        displayName: this.form.value.displayName,
+      };
+
+      const { data, error } =
+        await this.service.updateUserProfile(
+          updatedProfile,
+        );
+
+      if (error || !data) {
+        this.loadingState = LoadingState.ERROR;
+        return;
+      }
+
+      this.toastService.success(
+        'Successfully updated profile details',
+      );
+
+      this.profile = data;
+
+      this.store.dispatch(
+        setUserProfile({ profile: data }),
+      );
+
+      this.loadingState = LoadingState.LOADED;
     }
   }
 
