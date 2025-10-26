@@ -59,7 +59,9 @@ export class ProfileDetailsSectionComponent
     return this.form.controls[fieldName] as FormControl;
   }
 
-  protected onAvatarSelected(event: Event): void {
+  protected async onAvatarSelected(
+    event: Event,
+  ): Promise<void> {
     const input = event.target as HTMLInputElement;
 
     if (!input.files || input.files.length === 0) {
@@ -67,20 +69,46 @@ export class ProfileDetailsSectionComponent
     }
 
     const file = input.files[0];
-    const reader = new FileReader();
 
     // Show preview immediately
-    reader.onload = () => {
-      this.profile = {
-        ...this.profile!,
-        avatarPath: reader.result as string,
-      };
-    };
+    const reader = new FileReader();
+    const preview = await new Promise<string>(
+      (resolve, reject) => {
+        reader.onload = () =>
+          resolve(reader.result as string);
+        reader.onerror = () => reject(reader.error);
+        reader.readAsDataURL(file);
+      },
+    );
 
-    reader.readAsDataURL(file);
+    try {
+      const { data, error } =
+        await this.service.uploadAvatar(
+          {
+            ...this.profile!,
+            avatarPath: preview,
+          },
+          file,
+        );
 
-    // Optional: dispatch upload action here
-    // this.store.dispatch(uploadAvatar({ file }));
+      if (error || !data) {
+        this.toastService.error('Failed to upload avatar');
+        return;
+      }
+
+      this.toastService.success(
+        'Successfully updated avatar',
+      );
+
+      this.store.dispatch(
+        setUserProfile({ profile: data }),
+      );
+    } catch (err) {
+      console.error(err);
+      this.toastService.error(
+        'Unexpected error occurs while uploading avatar',
+      );
+    }
   }
 
   protected get isSubmitDisabled(): boolean {
@@ -121,8 +149,6 @@ export class ProfileDetailsSectionComponent
       this.toastService.success(
         'Successfully updated profile details',
       );
-
-      this.profile = data;
 
       this.store.dispatch(
         setUserProfile({ profile: data }),

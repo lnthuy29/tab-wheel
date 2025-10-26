@@ -137,4 +137,116 @@ export class AuthService {
 
     return { data: updatedProfile, error: null };
   }
+
+  public async uploadAvatar(
+    profile: Pick<
+      UserProfile,
+      'id' | 'avatarPath' | 'displayName'
+    >,
+    file: File,
+  ): Promise<{ data: Nullable<UserProfile>; error: any }> {
+    try {
+      const fileExtension = file.name.split('.').pop();
+
+      const sanitizedPrefix = profile.displayName
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-zA-Z0-9._-]/g, '')
+        .toLowerCase();
+
+      // Add timestamp (ISO format without special chars)
+      const timestamp = new Date()
+        .toISOString()
+        .replace(/[-:.TZ]/g, '');
+
+      const fileName = `${sanitizedPrefix}-${timestamp}.${fileExtension}`;
+      const filePath = `avatars/${fileName}`;
+
+      // Upload new avatar to 'users' bucket
+      const { error: uploadError } = await supabase.storage
+        .from('users')
+        .upload(filePath, file, { upsert: true });
+
+      if (uploadError) {
+        console.error(
+          'Failed to upload avatar:',
+          uploadError,
+        );
+        return { data: null, error: uploadError };
+      }
+
+      // Delete old avatar if exists and not default
+      if (
+        profile.avatarPath &&
+        profile.avatarPath.includes('avatars/') &&
+        !profile.avatarPath.includes('default-avatar')
+      ) {
+        try {
+          const storagePrefix =
+            '/storage/v1/object/public/users/';
+          const oldFilePath = profile.avatarPath.includes(
+            storagePrefix,
+          )
+            ? profile.avatarPath.substring(
+                profile.avatarPath.indexOf(storagePrefix) +
+                  storagePrefix.length,
+              )
+            : null;
+          if (oldFilePath && oldFilePath !== filePath) {
+            const { error: deleteError } =
+              await supabase.storage
+                .from('users')
+                .remove([oldFilePath]);
+
+            if (deleteError) {
+              console.warn(
+                'Failed to delete old avatar:',
+                deleteError,
+              );
+            }
+          }
+        } catch (deleteEx) {
+          console.warn(
+            'Unexpected error occurred while deleting old avatar:',
+            deleteEx,
+          );
+        }
+      }
+
+      // Get the public URL
+      const { data: publicUrlData } = supabase.storage
+        .from('users')
+        .getPublicUrl(filePath);
+
+      const publicUrl =
+        publicUrlData?.publicUrl ?? filePath;
+
+      // Update user profile in the database
+      const { data: profileData, error: updateError } =
+        await supabase
+          .from(EntityTable.PROFILES)
+          .update({ avatar_path: publicUrl })
+          .eq('id', profile.id)
+          .select('*')
+          .single();
+
+      if (updateError || !profileData) {
+        console.error(
+          'Failed to update avatar path:',
+          updateError,
+        );
+        return { data: null, error: updateError };
+      }
+
+      const updatedProfile =
+        toCamelCaseObject<UserProfile>(profileData);
+      return { data: updatedProfile, error: null };
+    } catch (error) {
+      console.error(
+        'Unexpected error occurred while uploading avatar:',
+        error,
+      );
+      return { data: null, error };
+    }
+  }
 }
