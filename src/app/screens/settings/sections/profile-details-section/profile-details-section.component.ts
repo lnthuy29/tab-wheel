@@ -55,10 +55,8 @@ export class ProfileDetailsSectionComponent
     this.subscription?.unsubscribe();
   }
 
-  protected get displayNameControl(): FormControl<string> {
-    return this.form.controls[
-      'displayName'
-    ] as FormControl<string>;
+  protected fieldControl(fieldName: string): FormControl {
+    return this.form.controls[fieldName] as FormControl;
   }
 
   protected onAvatarSelected(event: Event): void {

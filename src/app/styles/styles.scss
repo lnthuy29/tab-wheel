@@ -36,33 +36,6 @@ p {
   }
 }
 
-.input-group {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-
-  &__label {
-    font-weight: 600;
-  }
-
-  &__input {
-    padding: 8px;
-    border: none;
-    border-bottom: 2px solid var(--color-border);
-    border-radius: 4px;
-
-    &:focus {
-      outline: none;
-      border-bottom: 2px solid var(--color-primary);
-    }
-  }
-
-  &__error {
-    font-size: var(--font-size-sm);
-    color: var(--color-red-900);
-  }
-}
-
 .button-primary {
   padding: 12px;
   border: none;

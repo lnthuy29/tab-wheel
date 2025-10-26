@@ -48,6 +48,10 @@ export class LogInScreenComponent implements OnInit {
     }
   }
 
+  protected fieldControl(fieldName: string): FormControl {
+    return this.form.controls[fieldName] as FormControl;
+  }
+
   protected async onSubmit() {
     this.form.markAllAsTouched();
 
