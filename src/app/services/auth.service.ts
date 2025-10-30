@@ -90,10 +90,7 @@ export class AuthService {
         .eq('id', userId);
 
       if (profileUpdateError) {
-        console.error(
-          'Failed to update password_changed_first_time:',
-          profileUpdateError,
-        );
+        console.error(profileUpdateError);
       }
     }
 
@@ -124,16 +121,8 @@ export class AuthService {
       return { data: null, error };
     }
 
-    const updatedProfile: UserProfile = {
-      id: data.id,
-      displayName: data.display_name,
-      avatarPath: data.avatar_path,
-      employeeRoleId: data.employee_role_id,
-      passwordChangedFirstTime:
-        data.password_changed_first_time,
-      createdAt: data.created_at,
-      updatedAt: data.updated_at,
-    };
+    const updatedProfile: UserProfile =
+      toCamelCaseObject(data);
 
     return { data: updatedProfile, error: null };
   }
@@ -154,7 +143,6 @@ export class AuthService {
         .replace(/[^a-zA-Z0-9._-]/g, '')
         .toLowerCase();
 
-      // Add timestamp (ISO format without special chars)
       const timestamp = new Date()
         .toISOString()
         .replace(/[-:.TZ]/g, '');
@@ -178,20 +166,36 @@ export class AuthService {
       // Delete old avatar if exists and not default
       if (
         profile.avatarPath &&
-        profile.avatarPath.includes('avatars/') &&
         !profile.avatarPath.includes('default-avatar')
       ) {
         try {
           const storagePrefix =
             '/storage/v1/object/public/users/';
-          const oldFilePath = profile.avatarPath.includes(
-            storagePrefix,
-          )
-            ? profile.avatarPath.substring(
+          let oldFilePath: string | null = null;
+
+          try {
+            // Try to parse absolute URLs
+            const url = new URL(profile.avatarPath);
+            const pathname = url.pathname;
+            const index = pathname.indexOf(storagePrefix);
+            if (index !== -1) {
+              oldFilePath = pathname.substring(
+                index + storagePrefix.length,
+              );
+            }
+          } catch {
+            // Fallback for relative paths
+            if (
+              profile.avatarPath.includes(storagePrefix)
+            ) {
+              oldFilePath = profile.avatarPath.substring(
                 profile.avatarPath.indexOf(storagePrefix) +
                   storagePrefix.length,
-              )
-            : null;
+              );
+            }
+          }
+
+          // If found and it’s not the same as the new file
           if (oldFilePath && oldFilePath !== filePath) {
             const { error: deleteError } =
               await supabase.storage

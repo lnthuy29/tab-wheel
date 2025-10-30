@@ -84,10 +84,7 @@ export class ProfileDetailsSectionComponent
     try {
       const { data, error } =
         await this.service.uploadAvatar(
-          {
-            ...this.profile!,
-            avatarPath: preview,
-          },
+          this.profile!,
           file,
         );
 
