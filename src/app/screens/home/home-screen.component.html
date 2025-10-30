@@ -1,0 +1,136 @@
+<div class="app-home-screen">
+  <aside
+    class="app-home-screen__sidebar"
+    [class.collapsed]="!isSidebarExpanded"
+  >
+    <div class="app-home-screen__sidebar__logo">
+      <img
+        class="app-home-screen__sidebar__nav__list__item__image"
+        src="./logo.png"
+      />
+
+      <span
+        class="app-home-screen__sidebar__nav__list__item__text"
+        *ngIf="isSidebarExpanded"
+        >Tab Wheel
+      </span>
+    </div>
+
+    <nav class="app-home-screen__sidebar__nav">
+      <ul
+        class="app-home-screen__sidebar__nav__list"
+        *ngFor="let item of navigationItems"
+      >
+        <li>
+          <a
+            routerLink="{{ item.path }}"
+            routerLinkActive="app-home-screen__sidebar__nav__list__item--active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            class="app-home-screen__sidebar__nav__list__item"
+            (click)="handleNavigationItemClicked(item)"
+          >
+            <span
+              class="app-home-screen__sidebar__nav__list__item__icon mdi mdi-{{
+                item.icon
+              }}"
+              aria-hidden="true"
+            ></span>
+            <span
+              class="app-home-screen__sidebar__nav__list__item__text"
+              *ngIf="isSidebarExpanded"
+              >{{ item.label }}</span
+            >
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <button
+      class="app-home-screen__sidebar__nav__toggle"
+      type="button"
+      (click)="isSidebarExpanded = !isSidebarExpanded"
+    >
+      <div
+        class="app-home-screen__sidebar__nav__list__item"
+      >
+        <span
+          class="app-home-screen__sidebar__nav__list__item__icon mdi mdi-{{
+            isSidebarExpanded
+              ? 'arrow-collapse-left'
+              : 'arrow-collapse-right'
+          }}"
+        >
+        </span>
+
+        <span
+          class="app-home-screen__sidebar__nav__list__item__text"
+          *ngIf="isSidebarExpanded"
+          >Collapse
+        </span>
+      </div>
+    </button>
+  </aside>
+
+  <main class="app-home-screen__main">
+    <div class="app-home-screen__main__top-bar">
+      <div class="app-home-screen__main__top-bar__left">
+        <h3
+          class="app-home-screen__main__top-bar__left__title"
+        >
+          {{ activeNavigationItem?.label ?? '' }}
+        </h3>
+
+        <!-- Search bar -->
+        <div
+          class="app-home-screen__main__top-bar__left__search"
+        >
+          <input type="text" placeholder="Search..." />
+          <span class="mdi mdi-magnify"></span>
+        </div>
+      </div>
+
+      <div class="app-home-screen__main__top-bar__actions">
+        <!-- Notification button -->
+        <button
+          type="button"
+          class="app-home-screen__main__top-bar__icon-btn"
+        >
+          <span class="mdi mdi-bell-outline"></span>
+        </button>
+
+        <!-- Color theme switcher -->
+        <button
+          type="button"
+          class="app-home-screen__main__top-bar__icon-btn"
+        >
+          <span class="mdi mdi-weather-night"></span>
+        </button>
+
+        <!-- Avatar + profile name -->
+        <a
+          routerLink="settings"
+          class="app-home-screen__main__top-bar__profile"
+          (click)="
+            handleNavigationItemClicked({
+              label: 'Settings',
+            })
+          "
+        >
+          <img
+            [src]="
+              profile?.avatarPath ||
+              'assets/images/default-avatar.svg'
+            "
+            alt="User avatar"
+          />
+          <span>{{
+            profile?.displayName ?? 'Your name...'
+          }}</span>
+        </a>
+      </div>
+    </div>
+    <div class="app-home-screen__main__page">
+      <router-outlet></router-outlet>
+    </div>
+  </main>
+</div>

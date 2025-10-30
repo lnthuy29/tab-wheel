@@ -4,27 +4,31 @@ import { UserResponse } from '@supabase/supabase-js';
 import { EntityTable } from 'src/app/models/entity.enum';
 import { Nullable } from 'src/app/models/nullable.type';
 import { UserProfile } from 'src/app/models/profile.interface';
+import {
+  toCamelCaseObject,
+  toSnakeCaseObject,
+} from '../utilities/naming-convention.utils';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  async getSession() {
+  public async getSession() {
     return await supabase.auth.getSession();
   }
 
-  async signIn(email: string, password: string) {
+  public async signIn(email: string, password: string) {
     return await supabase.auth.signInWithPassword({
       email,
       password,
     });
   }
 
-  async getUser(): Promise<UserResponse> {
+  public async getUser(): Promise<UserResponse> {
     return await supabase.auth.getUser();
   }
 
-  async getUserProfile(
+  public async getUserProfile(
     userId: string,
   ): Promise<Nullable<UserProfile>> {
     const { data, error } = await supabase
@@ -35,19 +39,12 @@ export class AuthService {
 
     if (error || !data) return null;
 
-    return {
-      id: data.id,
-      displayName: data.display_name,
-      avatarPath: data.avatar_path,
-      employeeRoleId: data.employee_role_id,
-      passwordChangedFirstTime:
-        data.password_changed_first_time,
-      createdAt: data.created_at,
-      updatedAt: data.updated_at,
-    };
+    const profile = toCamelCaseObject<UserProfile>(data);
+
+    return profile;
   }
 
-  async validateCurrentPassword(
+  public async validateCurrentPassword(
     currentPassword: string,
   ): Promise<boolean> {
     const {
@@ -72,7 +69,9 @@ export class AuthService {
     return true;
   }
 
-  async updatePasswordForLoggedInUser(newPassword: string) {
+  public async updatePasswordForLoggedInUser(
+    newPassword: string,
+  ) {
     const { data: userUpdateData, error: userUpdateError } =
       await supabase.auth.updateUser({
         password: newPassword,
@@ -91,13 +90,178 @@ export class AuthService {
         .eq('id', userId);
 
       if (profileUpdateError) {
-        console.error(
-          'Failed to update password_changed_first_time:',
-          profileUpdateError,
-        );
+        console.error(profileUpdateError);
       }
     }
 
     return { data: userUpdateData, error: null };
+  }
+
+  public async updateUserProfile(
+    updates: Partial<UserProfile>,
+  ): Promise<{ data: Nullable<UserProfile>; error: any }> {
+    const filtered: Record<string, any> = {};
+    for (const [key, value] of Object.entries(updates)) {
+      if (value !== undefined && value !== null) {
+        filtered[key] = value;
+      }
+    }
+
+    const payload = toSnakeCaseObject(filtered);
+
+    const { data, error } = await supabase
+      .from(EntityTable.PROFILES)
+      .update(payload)
+      .eq('id', updates.id)
+      .select('*')
+      .single();
+
+    if (error || !data) {
+      console.error('Failed to update profile:', error);
+      return { data: null, error };
+    }
+
+    const updatedProfile: UserProfile =
+      toCamelCaseObject(data);
+
+    return { data: updatedProfile, error: null };
+  }
+
+  public async uploadAvatar(
+    profile: Pick<
+      UserProfile,
+      'id' | 'avatarPath' | 'displayName'
+    >,
+    file: File,
+  ): Promise<{ data: Nullable<UserProfile>; error: any }> {
+    try {
+      const fileExtension = file.name.split('.').pop();
+
+      const sanitizedPrefix = profile.displayName
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-zA-Z0-9._-]/g, '')
+        .toLowerCase();
+
+      const timestamp = new Date()
+        .toISOString()
+        .replace(/[-:.TZ]/g, '');
+
+      const fileName = `${sanitizedPrefix}-${timestamp}.${fileExtension}`;
+      const filePath = `avatars/${fileName}`;
+
+      // Upload new avatar to 'users' bucket
+      const { error: uploadError } = await supabase.storage
+        .from('users')
+        .upload(filePath, file, { upsert: true });
+
+      if (uploadError) {
+        console.error(
+          'Failed to upload avatar:',
+          uploadError,
+        );
+        return { data: null, error: uploadError };
+      }
+
+      // Delete old avatar if exists and not default
+      if (
+        profile.avatarPath &&
+        !profile.avatarPath.includes('default-avatar')
+      ) {
+        try {
+          const storagePrefix =
+            '/storage/v1/object/public/users/';
+          let oldFilePath: string | null = null;
+
+          try {
+            // Try to parse absolute URLs
+            const url = new URL(profile.avatarPath);
+            const pathname = url.pathname;
+            const index = pathname.indexOf(storagePrefix);
+            if (index !== -1) {
+              oldFilePath = pathname.substring(
+                index + storagePrefix.length,
+              );
+            }
+          } catch {
+            // Fallback for relative paths
+            if (
+              profile.avatarPath.includes(storagePrefix)
+            ) {
+              oldFilePath = profile.avatarPath.substring(
+                profile.avatarPath.indexOf(storagePrefix) +
+                  storagePrefix.length,
+              );
+            }
+          }
+
+          // If found and it’s not the same as the new file
+          if (oldFilePath && oldFilePath !== filePath) {
+            const { error: deleteError } =
+              await supabase.storage
+                .from('users')
+                .remove([oldFilePath]);
+
+            if (deleteError) {
+              console.warn(
+                'Failed to delete old avatar:',
+                deleteError,
+              );
+            }
+          }
+        } catch (deleteEx) {
+          console.warn(
+            'Unexpected error occurred while deleting old avatar:',
+            deleteEx,
+          );
+        }
+      }
+
+      // Get the public URL
+      const { data: publicUrlData } = supabase.storage
+        .from('users')
+        .getPublicUrl(filePath);
+
+      const publicUrl =
+        publicUrlData?.publicUrl ?? filePath;
+
+      // Update user profile in the database
+      const { data: profileData, error: updateError } =
+        await supabase
+          .from(EntityTable.PROFILES)
+          .update({ avatar_path: publicUrl })
+          .eq('id', profile.id)
+          .select('*')
+          .single();
+
+      if (updateError || !profileData) {
+        console.error(
+          'Failed to update avatar path:',
+          updateError,
+        );
+        return { data: null, error: updateError };
+      }
+
+      const updatedProfile =
+        toCamelCaseObject<UserProfile>(profileData);
+      return { data: updatedProfile, error: null };
+    } catch (error) {
+      console.error(
+        'Unexpected error occurred while uploading avatar:',
+        error,
+      );
+      return { data: null, error };
+    }
+  }
+
+  public async signOut(): Promise<{ error: any }> {
+    const { error } = await supabase.auth.signOut();
+
+    if (error) {
+      console.error('Failed to sign out:', error);
+      return { error };
+    }
+
+    return { error: null };
   }
 }

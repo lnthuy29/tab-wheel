@@ -1,6 +1,7 @@
 import {
   ChangeDetectorRef,
   Component,
+  Input,
 } from '@angular/core';
 import { ModalConfiguration } from '../modal/models/modal.interface';
 import { ModalSize } from '../modal/models/modal-size.enum';
@@ -19,7 +20,7 @@ import { LoadingState } from 'src/app/models/loading-state.enum';
 import { Nullable } from 'src/app/models/nullable.type';
 import { selectProfile } from 'src/app/store/profile/profile.selector';
 import { UserProfile } from 'src/app/models/profile.interface';
-import { AppState } from 'src/app/app.state';
+import { AppState } from 'src/app/store/app.state';
 import { setUserProfile } from 'src/app/store/profile/profile.action';
 import { ToastService } from 'src/app/services/toast.service';
 
@@ -29,15 +30,9 @@ import { ToastService } from 'src/app/services/toast.service';
   styleUrl: './change-password-modal.component.scss',
 })
 export class ChangePasswordModalComponent {
-  public isVisible = false;
+  @Input() public configuration!: ModalConfiguration;
 
-  protected modalConfiguration: ModalConfiguration = {
-    title: 'Change password',
-    subtitle:
-      'As this is your first login, we recommend you change your password to protect your privacy.',
-    showCloseButton: false,
-    size: ModalSize.SMALL,
-  };
+  protected isVisible = false;
 
   private passwordsMatchValidator: ValidatorFn = (
     control: AbstractControl,
@@ -88,6 +83,10 @@ export class ChangePasswordModalComponent {
     { validators: this.passwordsMatchValidator },
   );
 
+  protected fieldControl(fieldName: string): FormControl {
+    return this.form.controls[fieldName] as FormControl;
+  }
+
   protected loadingState: LoadingState =
     LoadingState.INITIAL;
 
@@ -116,6 +115,10 @@ export class ChangePasswordModalComponent {
   public close() {
     this.isVisible = false;
     this.form.reset();
+  }
+
+  protected handleCloseEmitted(): void {
+    this.close();
   }
 
   protected async onSubmit() {

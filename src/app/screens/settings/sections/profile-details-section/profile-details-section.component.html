@@ -1,0 +1,93 @@
+<div class="app-profile-details-section">
+  <h3 class="app-profile-details-section__header">
+    Profile details
+  </h3>
+  <ng-container
+    class="app-profile-details-section__body"
+    *ngIf="profile; else fetching"
+  >
+    <div class="app-profile-details-section__body__avatar">
+      <div
+        class="app-profile-details-section__body__avatar__image-container"
+      >
+        <img
+          class="app-profile-details-section__body__avatar__image-container__image"
+          [src]="
+            profile.avatarPath ||
+            'assets/images/default-avatar.svg'
+          "
+          alt="Profile avatar"
+        />
+
+        <!-- Centered spinner overlay -->
+        <div
+          class="app-profile-details-section__body__avatar__image-container__spinner-overlay"
+          *ngIf="uploadAvatarState === LoadingState.LOADING"
+        >
+          <div class="spinner"></div>
+        </div>
+      </div>
+
+      <label
+        class="app-profile-details-section__body__avatar__upload"
+        for="avatarInput"
+        [class.disabled]="
+          uploadAvatarState === LoadingState.LOADING
+        "
+      >
+        <input
+          id="avatarInput"
+          type="file"
+          accept="image/*"
+          (change)="onAvatarSelected($event)"
+          hidden
+          [disabled]="
+            uploadAvatarState === LoadingState.LOADING
+          "
+        />
+        <small
+          class="profile-details-section__body__avatar__upload-button"
+        >
+          Upload image
+        </small>
+      </label>
+    </div>
+
+    <form
+      [formGroup]="form"
+      (ngSubmit)="onSubmit()"
+      class="app-profile-details-section__body__form"
+    >
+      <app-form-field
+        label="Display name"
+        [control]="fieldControl('displayName')"
+        type="text"
+      />
+
+      <button
+        type="submit"
+        [disabled]="isSubmitDisabled"
+        class="app-profile-details-section__body__form__submit-button"
+      >
+        <ng-container
+          *ngIf="
+            submitState !== LoadingState.LOADING;
+            else submitting
+          "
+        >
+          Update profile
+        </ng-container>
+      </button>
+    </form>
+  </ng-container>
+</div>
+
+<ng-template #fetching>
+  <div class="app-profile-details-section__body--loading">
+    <div class="skeleton" style="height: 250px"></div>
+  </div>
+</ng-template>
+
+<ng-template #submitting>
+  <span class="spinner"></span>
+</ng-template>

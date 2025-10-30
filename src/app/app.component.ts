@@ -4,7 +4,7 @@ import {
   ViewChild,
   OnDestroy,
 } from '@angular/core';
-import { AppState } from './app.state';
+import { AppState } from './store/app.state';
 import { Store } from '@ngrx/store';
 import { AuthService } from './services/auth.service';
 import { setUserProfile } from './store/profile/profile.action';
@@ -13,6 +13,8 @@ import { ChangePasswordModalComponent } from './components/change-password-modal
 import { Subscription } from 'rxjs';
 import { selectProfile } from './store/profile/profile.selector';
 import { Nullable } from './models/nullable.type';
+import { ModalConfiguration } from './components/modal/models/modal.interface';
+import { ModalSize } from './components/modal/models/modal-size.enum';
 
 @Component({
   selector: 'app-root',
@@ -20,10 +22,19 @@ import { Nullable } from './models/nullable.type';
 })
 export class AppComponent implements OnInit, OnDestroy {
   private profile!: Nullable<UserProfile>;
+
   private profileSub!: Subscription;
 
   @ViewChild(ChangePasswordModalComponent)
   public modal!: ChangePasswordModalComponent;
+
+  protected modalConfiguration: ModalConfiguration = {
+    title: 'Change password',
+    subtitle:
+      'As this is your first login, we recommend you change your password to protect your privacy.',
+    showCloseButton: false,
+    size: ModalSize.SMALL,
+  };
 
   public constructor(
     private store: Store<AppState>,
@@ -56,8 +67,9 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   private showChangePasswordModalIfNeeded(): void {
+    if (!this.profile) return;
+
     if (!this.profile?.passwordChangedFirstTime) {
-      console.log('Open modal');
       this.modal?.open();
     } else {
       this.modal?.close();
