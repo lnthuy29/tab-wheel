@@ -1,19 +1,16 @@
 .app-settings-screen {
-  &__body {
-    display: flex;
-    justify-content: space-between;
-    gap: 24px;
-    margin-top: 24px;
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
 
-    > * {
-      flex: 1;
-    }
+  > * {
+    flex: 1;
+  }
 
-    &__section {
-      border-radius: 16px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      padding: 16px;
-      background-color: var(--color-white);
-    }
+  &__section {
+    border-radius: 16px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 16px;
+    background-color: var(--color-white);
   }
 }

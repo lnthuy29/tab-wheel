@@ -13,8 +13,9 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    justify-content: space-between;
+    justify-content: flex-start;
     gap: 24px;
+    min-width: 270px;
 
     &__logo {
       display: flex;
@@ -28,7 +29,7 @@
       display: flex;
       flex-direction: column;
       align-items: flex-start;
-      justify-content: space-between;
+      justify-content: flex-start;
 
       &__list {
         list-style: none;
@@ -91,10 +92,94 @@
 
   &__main {
     flex: 1;
-    padding: 1rem;
-    background: var(--color-background);
+    display: flex;
+    flex-direction: column;
     box-sizing: border-box;
-    overflow: auto;
+
+    &__top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--color-border);
+      background-color: var(--color-background);
+      padding: 16px;
+
+      &__left {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 24px;
+
+        &__title {
+          font-size: var(--font-size-md);
+        }
+
+        &__search {
+          display: flex;
+          align-items: center;
+          background: var(--color-white);
+          padding: 10px;
+          border-radius: 8px;
+          min-width: 400px;
+
+          span {
+            font-size: var(--font-size-md);
+            color: var(--color-gray-700);
+          }
+
+          input {
+            border: none;
+            background: transparent;
+            outline: none;
+            font-size: 14px;
+            width: 100%;
+          }
+        }
+      }
+
+      &__actions {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+
+      &__icon-btn {
+        background: var(--color-white);
+        padding: 8px;
+        border-radius: 50%;
+        border: none;
+        cursor: pointer;
+        font-size: 20px;
+        color: var(--color-gray-700);
+      }
+
+      &__profile {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-left: 16px;
+        text-decoration: none;
+        color: var(--color-text);
+
+        img {
+          width: 44px;
+          height: 44px;
+          border-radius: 50%;
+          object-fit: cover;
+        }
+
+        span {
+          font-weight: 500;
+          max-width: 100px;
+        }
+      }
+    }
+
+    &__page {
+      flex: 1;
+      padding: 16px;
+      background-color: var(--color-gray-50);
+    }
   }
 }
 

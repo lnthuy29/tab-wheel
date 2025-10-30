@@ -5,16 +5,13 @@ import { DashboardScreenComponent } from '../dashboard/dashboard-screen.componen
 import { SettingsScreenComponent } from '../settings/settings-screen.component';
 import { DonationScreenComponent } from '../donation/donation-screen.component';
 
-export const topNavigationItems: any[] = [
+export const navigationItems: any[] = [
   {
     label: 'Dashboard',
     path: '/dashboard',
     icon: 'home',
     component: DashboardScreenComponent,
   },
-];
-
-export const bottomNavigationItems: any[] = [
   {
     label: 'Buy me a drink',
     path: '/buy-me-a-drink',
@@ -28,11 +25,7 @@ const routes: Routes = [
     path: '',
     component: HomeScreenComponent,
     children: [
-      ...topNavigationItems.map((item) => ({
-        path: item.path.replace('/', ''),
-        component: item.component,
-      })),
-      ...bottomNavigationItems.map((item) => ({
+      ...navigationItems.map((item) => ({
         path: item.path.replace('/', ''),
         component: item.component,
       })),

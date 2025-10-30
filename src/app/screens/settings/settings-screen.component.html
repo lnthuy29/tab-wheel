@@ -1,19 +1,12 @@
 <div class="app-settings-screen">
-  <h1 class="app-settings-screen__title">Settings</h1>
-  <div class="app-settings-screen__body">
-    <app-profile-details-section
-      class="app-settings-screen__body__section"
-    />
+  <app-profile-details-section
+    class="app-settings-screen__section"
+  />
 
-    <div
-      style="
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-      "
-    >
-      <app-change-password-section />
-      <app-sign-out-section />
-    </div>
+  <div
+    style="display: flex; flex-direction: column; gap: 8px"
+  >
+    <app-change-password-section />
+    <app-sign-out-section />
   </div>
 </div>
