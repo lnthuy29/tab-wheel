@@ -1,0 +1,11 @@
+@use '../../../../styles/styles.scss';
+
+.app-sign-out-section {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+
+  &__button {
+    @extend .button-outlined;
+  }
+}
