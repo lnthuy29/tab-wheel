@@ -1,10 +1,15 @@
 import { Component, Input } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import {
+  FormControl,
+  ReactiveFormsModule,
+} from '@angular/forms';
 
 @Component({
   selector: 'app-form-field',
   templateUrl: './form-field.component.html',
   styleUrl: './form-field.component.scss',
+  standalone: true,
+  imports: [ReactiveFormsModule],
 })
 export class FormFieldComponent {
   @Input() label!: string;
