@@ -4,6 +4,7 @@ import { HomeScreenComponent } from './home-screen.component';
 import { DashboardScreenComponent } from '../dashboard/dashboard-screen.component';
 import { SettingsScreenComponent } from '../settings/settings-screen.component';
 import { DonationScreenComponent } from '../donation/donation-screen.component';
+import { AuthGuard } from 'src/app/guards/auth.guard';
 
 export const navigationItems: any[] = [
   {
@@ -24,6 +25,7 @@ const routes: Routes = [
   {
     path: '',
     component: HomeScreenComponent,
+    canActivate: [AuthGuard],
     children: [
       ...navigationItems.map((item) => ({
         path: item.path.replace('/', ''),

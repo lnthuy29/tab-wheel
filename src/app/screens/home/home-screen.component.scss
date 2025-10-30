@@ -5,7 +5,6 @@
   height: 100vh;
 
   &__sidebar {
-    transition: width 0.3s ease;
     background: var(--color-primary);
     color: var(--color-white);
     padding: 1rem;
@@ -15,7 +14,12 @@
     align-items: flex-start;
     justify-content: flex-start;
     gap: 24px;
-    min-width: 270px;
+    width: 270px;
+    transition: width 0.3s ease;
+
+    &.collapsed {
+      width: 64px;
+    }
 
     &__logo {
       display: flex;

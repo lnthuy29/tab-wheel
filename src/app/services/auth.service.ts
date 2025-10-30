@@ -253,4 +253,15 @@ export class AuthService {
       return { data: null, error };
     }
   }
+
+  public async signOut(): Promise<{ error: any }> {
+    const { error } = await supabase.auth.signOut();
+
+    if (error) {
+      console.error('Failed to sign out:', error);
+      return { error };
+    }
+
+    return { error: null };
+  }
 }

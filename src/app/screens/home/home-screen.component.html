@@ -1,5 +1,8 @@
 <div class="app-home-screen">
-  <aside class="app-home-screen__sidebar">
+  <aside
+    class="app-home-screen__sidebar"
+    [class.collapsed]="!isSidebarExpanded"
+  >
     <div class="app-home-screen__sidebar__logo">
       <img
         class="app-home-screen__sidebar__nav__list__item__image"

@@ -67,6 +67,8 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   private showChangePasswordModalIfNeeded(): void {
+    if (!this.profile) return;
+
     if (!this.profile?.passwordChangedFirstTime) {
       this.modal?.open();
     } else {
