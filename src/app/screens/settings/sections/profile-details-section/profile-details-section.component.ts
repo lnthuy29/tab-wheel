@@ -29,7 +29,10 @@ export class ProfileDetailsSectionComponent
   protected profile: Nullable<UserProfile> = null;
   private subscription: Subscription = new Subscription();
 
-  protected loadingState: LoadingState =
+  protected submitState: LoadingState =
+    LoadingState.INITIAL;
+
+  protected uploadAvatarState: LoadingState =
     LoadingState.INITIAL;
 
   protected LoadingState = LoadingState;
@@ -70,18 +73,9 @@ export class ProfileDetailsSectionComponent
 
     const file = input.files[0];
 
-    // Show preview immediately
-    const reader = new FileReader();
-    const preview = await new Promise<string>(
-      (resolve, reject) => {
-        reader.onload = () =>
-          resolve(reader.result as string);
-        reader.onerror = () => reject(reader.error);
-        reader.readAsDataURL(file);
-      },
-    );
-
     try {
+      this.uploadAvatarState = LoadingState.LOADING;
+
       const { data, error } =
         await this.service.uploadAvatar(
           this.profile!,
@@ -93,6 +87,8 @@ export class ProfileDetailsSectionComponent
         return;
       }
 
+      this.uploadAvatarState = LoadingState.LOADED;
+
       this.toastService.success(
         'Successfully updated avatar',
       );
@@ -101,6 +97,7 @@ export class ProfileDetailsSectionComponent
         setUserProfile({ profile: data }),
       );
     } catch (err) {
+      this.uploadAvatarState = LoadingState.ERROR;
       console.error(err);
       this.toastService.error(
         'Unexpected error occurs while uploading avatar',
@@ -117,7 +114,7 @@ export class ProfileDetailsSectionComponent
 
     const invalid = this.form.invalid;
     const loading =
-      this.loadingState === LoadingState.LOADING;
+      this.submitState === LoadingState.LOADING;
 
     return invalid || loading || !hasChanges;
   }
@@ -126,7 +123,7 @@ export class ProfileDetailsSectionComponent
     this.form.markAllAsTouched();
 
     if (this.form.valid) {
-      this.loadingState = LoadingState.LOADING;
+      this.submitState = LoadingState.LOADING;
 
       const updatedProfile: Partial<UserProfile> = {
         id: this.profile!.id,
@@ -139,7 +136,7 @@ export class ProfileDetailsSectionComponent
         );
 
       if (error || !data) {
-        this.loadingState = LoadingState.ERROR;
+        this.submitState = LoadingState.ERROR;
         return;
       }
 
@@ -151,7 +148,7 @@ export class ProfileDetailsSectionComponent
         setUserProfile({ profile: data }),
       );
 
-      this.loadingState = LoadingState.LOADED;
+      this.submitState = LoadingState.LOADED;
     }
   }
 
