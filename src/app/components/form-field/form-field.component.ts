@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import {
   FormControl,
@@ -9,7 +10,7 @@ import {
   templateUrl: './form-field.component.html',
   styleUrl: './form-field.component.scss',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule],
 })
 export class FormFieldComponent {
   @Input() label!: string;

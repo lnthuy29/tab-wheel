@@ -73,23 +73,17 @@
 
   <main class="app-home-screen__main">
     <div class="app-home-screen__main__top-bar">
-      <div class="app-home-screen__main__top-bar__left">
-        <h3
-          class="app-home-screen__main__top-bar__left__title"
-        >
-          {{ activeNavigationItem?.label ?? '' }}
-        </h3>
+      <h3 class="app-home-screen__main__top-bar__title">
+        {{ activeNavigationItem?.label ?? '' }}
+      </h3>
 
+      <div class="app-home-screen__main__top-bar__actions">
         <!-- Search bar -->
-        <div
-          class="app-home-screen__main__top-bar__left__search"
-        >
+        <div class="app-home-screen__main__top-bar__search">
           <input type="text" placeholder="Search..." />
           <span class="mdi mdi-magnify"></span>
         </div>
-      </div>
 
-      <div class="app-home-screen__main__top-bar__actions">
         <!-- Notification button -->
         <button
           type="button"
