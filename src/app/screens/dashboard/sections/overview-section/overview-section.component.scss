@@ -1,25 +1,36 @@
+@use '../../../../styles/styles.scss';
+
 .app-dashboard-overview {
-  &__section {
-    &__greeting {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  &__greeting {
+    display: flex;
+    justify-content: space-between;
+    &__left {
       display: flex;
-      justify-content: space-between;
-      &__left {
+      justify-content: flex-start;
+      align-items: center;
+      gap: 16px;
+      &__avatar {
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+      &__text {
         display: flex;
-        justify-content: flex-start;
-        align-items: center;
-        gap: 16px;
-        &__avatar {
-          width: 64px;
-          height: 64px;
-          border-radius: 50%;
-          object-fit: cover;
-        }
-        &__text {
-          display: flex;
-          flex-direction: column;
-          gap: 8px;
-        }
+        flex-direction: column;
+        gap: 8px;
       }
     }
+  }
+  &__statistic {
+    @extend .card;
+    padding: 12px;
+    background-color: var(--color-background);
+    display: flex;
+    gap: 8px;
   }
 }

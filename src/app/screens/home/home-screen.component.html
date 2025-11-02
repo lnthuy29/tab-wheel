@@ -123,7 +123,8 @@
         <img
           [src]="
             profile?.avatarPath ||
-            'assets/images/default-avatar.svg'
+            'https://ui-avatars.com/api/?name=' +
+              profile?.displayName
           "
           alt="User avatar"
         />

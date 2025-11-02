@@ -1,3 +1,5 @@
+@use '../../styles/styles.scss';
+
 .app-settings-screen {
   display: flex;
   justify-content: space-between;
@@ -8,9 +10,6 @@
   }
 
   &__section {
-    border-radius: 16px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    padding: 24px;
-    background-color: var(--color-white);
+    @extend .card;
   }
 }

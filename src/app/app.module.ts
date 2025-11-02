@@ -26,6 +26,7 @@ import { FormFieldComponent } from './components/form-field/form-field.component
 import { DashboardOverviewSectionComponent } from './screens/dashboard/sections/overview-section/overview-section.component';
 import { DashboardJoinedGroupsSectionComponent } from './screens/dashboard/sections/joined-groups-section/joined-groups-section.component';
 import { DashboardMatchScheduleSectionComponent } from './screens/dashboard/sections/match-schedule-section/match-schedule-section.component';
+import { NumberComponent } from './components/number/number.component';
 
 @NgModule({
   declarations: [
@@ -53,6 +54,7 @@ import { DashboardMatchScheduleSectionComponent } from './screens/dashboard/sect
     HomeRoutingModule,
     ModalComponent,
     FormFieldComponent,
+    NumberComponent,
   ],
   providers: [provideAnimations(), provideToastr()],
   bootstrap: [AppComponent],

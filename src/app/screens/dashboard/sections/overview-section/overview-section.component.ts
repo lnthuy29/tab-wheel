@@ -13,6 +13,8 @@ import {
   getGreeting,
   getSessionOfDay,
 } from './utilities/overview-section.utils';
+import { NumberComponentProp } from 'src/app/components/number/number.component';
+import { DashboardService } from '../../services/dashboard.service';
 
 @Component({
   selector: 'app-dashboard-overview-section',
@@ -24,11 +26,18 @@ export class DashboardOverviewSectionComponent
 {
   protected profile: Nullable<UserProfile> = null;
 
-  private subscription: Subscription = new Subscription();
+  protected numberComponentProps: Nullable<
+    NumberComponentProp[]
+  > = null;
 
   protected LoadingState = LoadingState;
 
-  public constructor(private store: Store<AppState>) {}
+  private subscription: Subscription = new Subscription();
+
+  public constructor(
+    private store: Store<AppState>,
+    private dashboardService: DashboardService,
+  ) {}
 
   public ngOnInit(): void {
     this.loadUserProfile();
@@ -42,11 +51,48 @@ export class DashboardOverviewSectionComponent
     return getGreeting(getSessionOfDay());
   }
 
-  private loadUserProfile() {
+  private async loadUserProfile() {
     this.subscription = this.store
       .select((state) => state.profile)
       .subscribe((profile) => {
         this.profile = profile;
+        this.loadDashboardData();
       });
+  }
+
+  private async loadDashboardData(): Promise<void> {
+    const profileId: string | undefined = this.profile?.id;
+    if (!profileId) return;
+
+    try {
+      const [
+        groupsCount,
+        losingMatchesCount,
+        matchesCount,
+      ] = await Promise.all([
+        this.dashboardService.countUserGroups(profileId),
+        this.dashboardService.countUserLosingMatches(
+          profileId,
+        ),
+        this.dashboardService.countUserMatches(profileId),
+      ]);
+
+      this.numberComponentProps = [
+        {
+          label: 'Groups joined',
+          value: groupsCount,
+        },
+        {
+          label: 'Matches won',
+          value: matchesCount - losingMatchesCount,
+        },
+        {
+          label: 'Matches lost',
+          value: losingMatchesCount,
+        },
+      ];
+    } catch (err) {
+      console.error('Failed to load dashboard data:', err);
+    }
   }
 }
