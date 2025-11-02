@@ -1,1 +1,25 @@
-<p>overview-section works!</p>
+<div class="app-dashboard-overview">
+  <ng-container
+    [ngTemplateOutlet]="greeting"
+  ></ng-container>
+</div>
+
+<ng-template #greeting>
+  <div class="app-dashboard-overview__section__greeting">
+    <div
+      class="app-dashboard-overview__section__greeting__left"
+    >
+      <img
+        class="app-dashboard-overview__section__greeting__left__avatar"
+        [src]="profile?.avatarPath"
+        alt="User avatar"
+      />
+      <div
+        class="app-dashboard-overview__section__greeting__left__text"
+      >
+        <h3>{{ daySession }}</h3>
+        <p>{{ profile?.displayName }}</p>
+      </div>
+    </div>
+  </div>
+</ng-template>

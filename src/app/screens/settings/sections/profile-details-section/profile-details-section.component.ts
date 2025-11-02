@@ -27,6 +27,7 @@ export class ProfileDetailsSectionComponent
   implements OnInit, OnDestroy
 {
   protected profile: Nullable<UserProfile> = null;
+
   private subscription: Subscription = new Subscription();
 
   protected submitState: LoadingState =

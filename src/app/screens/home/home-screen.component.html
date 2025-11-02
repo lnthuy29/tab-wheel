@@ -72,59 +72,65 @@
   </aside>
 
   <main class="app-home-screen__main">
-    <div class="app-home-screen__main__top-bar">
-      <h3 class="app-home-screen__main__top-bar__title">
-        {{ activeNavigationItem?.label ?? '' }}
-      </h3>
-
-      <div class="app-home-screen__main__top-bar__actions">
-        <!-- Search bar -->
-        <div class="app-home-screen__main__top-bar__search">
-          <input type="text" placeholder="Search..." />
-          <span class="mdi mdi-magnify"></span>
-        </div>
-
-        <!-- Notification button -->
-        <button
-          type="button"
-          class="app-home-screen__main__top-bar__icon-btn"
-        >
-          <span class="mdi mdi-bell-outline"></span>
-        </button>
-
-        <!-- Color theme switcher -->
-        <button
-          type="button"
-          class="app-home-screen__main__top-bar__icon-btn"
-        >
-          <span class="mdi mdi-weather-night"></span>
-        </button>
-
-        <!-- Avatar + profile name -->
-        <a
-          routerLink="settings"
-          class="app-home-screen__main__top-bar__profile"
-          (click)="
-            handleNavigationItemClicked({
-              label: 'Settings',
-            })
-          "
-        >
-          <img
-            [src]="
-              profile?.avatarPath ||
-              'assets/images/default-avatar.svg'
-            "
-            alt="User avatar"
-          />
-          <span>{{
-            profile?.displayName ?? 'Your name...'
-          }}</span>
-        </a>
-      </div>
-    </div>
+    <ng-container
+      [ngTemplateOutlet]="topBar"
+    ></ng-container>
     <div class="app-home-screen__main__page">
       <router-outlet></router-outlet>
     </div>
   </main>
 </div>
+
+<ng-template #topBar>
+  <div class="app-home-screen__main__top-bar">
+    <h3 class="app-home-screen__main__top-bar__title">
+      {{ activeNavigationItem?.label ?? '' }}
+    </h3>
+
+    <div class="app-home-screen__main__top-bar__actions">
+      <!-- Search bar -->
+      <div class="app-home-screen__main__top-bar__search">
+        <input type="text" placeholder="Search..." />
+        <span class="mdi mdi-magnify"></span>
+      </div>
+
+      <!-- Notification button -->
+      <button
+        type="button"
+        class="app-home-screen__main__top-bar__icon-btn"
+      >
+        <span class="mdi mdi-bell-outline"></span>
+      </button>
+
+      <!-- Color theme switcher -->
+      <button
+        type="button"
+        class="app-home-screen__main__top-bar__icon-btn"
+      >
+        <span class="mdi mdi-weather-night"></span>
+      </button>
+
+      <!-- Avatar + profile name -->
+      <a
+        routerLink="settings"
+        class="app-home-screen__main__top-bar__profile"
+        (click)="
+          handleNavigationItemClicked({
+            label: 'Settings',
+          })
+        "
+      >
+        <img
+          [src]="
+            profile?.avatarPath ||
+            'assets/images/default-avatar.svg'
+          "
+          alt="User avatar"
+        />
+        <span>{{
+          profile?.displayName ?? 'Your name...'
+        }}</span>
+      </a>
+    </div>
+  </div>
+</ng-template>

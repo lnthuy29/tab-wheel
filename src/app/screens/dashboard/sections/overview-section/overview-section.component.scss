@@ -1,0 +1,25 @@
+.app-dashboard-overview {
+  &__section {
+    &__greeting {
+      display: flex;
+      justify-content: space-between;
+      &__left {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 16px;
+        &__avatar {
+          width: 64px;
+          height: 64px;
+          border-radius: 50%;
+          object-fit: cover;
+        }
+        &__text {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+        }
+      }
+    }
+  }
+}
