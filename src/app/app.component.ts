@@ -10,20 +10,22 @@ import { AuthService } from './services/auth.service';
 import { setUserProfile } from './store/profile/profile.action';
 import { UserProfile } from './models/profile.interface';
 import { ChangePasswordModalComponent } from './components/change-password-modal/change-password-modal.component';
-import { Subscription } from 'rxjs';
+import { filter, Subscription, take, tap } from 'rxjs';
 import { selectProfile } from './store/profile/profile.selector';
 import { Nullable } from './models/nullable.type';
 import { ModalConfiguration } from './components/modal/models/modal.interface';
 import { ModalSize } from './components/modal/models/modal-size.enum';
+import { ProfileHelper } from './helpers/profile.helper';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
 })
-export class AppComponent implements OnInit, OnDestroy {
-  private profile!: Nullable<UserProfile>;
-
-  private profileSub!: Subscription;
+export class AppComponent
+  extends ProfileHelper
+  implements OnInit, OnDestroy
+{
+  private subscription!: Subscription;
 
   @ViewChild(ChangePasswordModalComponent)
   public modal!: ChangePasswordModalComponent;
@@ -37,19 +39,18 @@ export class AppComponent implements OnInit, OnDestroy {
   };
 
   public constructor(
-    private store: Store<AppState>,
+    store: Store<AppState>,
     private authService: AuthService,
-  ) {}
+  ) {
+    super(store);
+  }
 
   public ngOnInit(): void {
     this.loadUserProfile();
+  }
 
-    this.profileSub = this.store
-      .select(selectProfile)
-      .subscribe((profile) => {
-        this.profile = profile;
-        this.showChangePasswordModalIfNeeded();
-      });
+  public ngOnDestroy(): void {
+    this.subscription?.unsubscribe();
   }
 
   private async loadUserProfile() {
@@ -64,6 +65,18 @@ export class AppComponent implements OnInit, OnDestroy {
         this.store.dispatch(setUserProfile({ profile }));
       }
     }
+    this.subscription.add(
+      this.profile$
+        .pipe(
+          filter(
+            (p: Nullable<UserProfile>): p is UserProfile =>
+              !!p,
+          ),
+          take(1),
+          tap(() => this.showChangePasswordModalIfNeeded()),
+        )
+        .subscribe(),
+    );
   }
 
   private showChangePasswordModalIfNeeded(): void {
@@ -74,9 +87,5 @@ export class AppComponent implements OnInit, OnDestroy {
     } else {
       this.modal?.close();
     }
-  }
-
-  public ngOnDestroy(): void {
-    this.profileSub?.unsubscribe();
   }
 }

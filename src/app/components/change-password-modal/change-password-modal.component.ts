@@ -2,6 +2,8 @@ import {
   ChangeDetectorRef,
   Component,
   Input,
+  OnDestroy,
+  OnInit,
 } from '@angular/core';
 import { ModalConfiguration } from '../modal/models/modal.interface';
 import { ModalSize } from '../modal/models/modal-size.enum';
@@ -23,16 +25,23 @@ import { UserProfile } from 'src/app/models/profile.interface';
 import { AppState } from 'src/app/store/app.state';
 import { setUserProfile } from 'src/app/store/profile/profile.action';
 import { ToastService } from 'src/app/services/toast.service';
+import { ProfileHelper } from 'src/app/helpers/profile.helper';
+import { filter, Subscription, take } from 'rxjs';
 
 @Component({
   selector: 'app-change-password-modal',
   templateUrl: './change-password-modal.component.html',
   styleUrl: './change-password-modal.component.scss',
 })
-export class ChangePasswordModalComponent {
+export class ChangePasswordModalComponent
+  extends ProfileHelper
+  implements OnInit, OnDestroy
+{
   @Input() public configuration!: ModalConfiguration;
 
   protected isVisible = false;
+
+  private subscription!: Subscription;
 
   private passwordsMatchValidator: ValidatorFn = (
     control: AbstractControl,
@@ -92,20 +101,30 @@ export class ChangePasswordModalComponent {
 
   protected LoadingState = LoadingState;
 
-  private profile!: UserProfile;
-
   public constructor(
-    private store: Store<AppState>,
+    store: Store<AppState>,
     private toastService: ToastService,
     private service: AuthService,
-  ) {}
+  ) {
+    super(store);
+  }
 
   public ngOnInit() {
-    this.store
-      .select(selectProfile)
-      .subscribe((profile) => {
-        this.profile = profile!;
-      });
+    this.subscription.add(
+      this.profile$
+        .pipe(
+          filter(
+            (p: Nullable<UserProfile>): p is UserProfile =>
+              !!p,
+          ),
+          take(1),
+        )
+        .subscribe(),
+    );
+  }
+
+  public ngOnDestroy(): void {
+    this.subscription?.unsubscribe();
   }
 
   public open() {
@@ -172,7 +191,7 @@ export class ChangePasswordModalComponent {
       this.store.dispatch(
         setUserProfile({
           profile: {
-            ...this.profile,
+            ...this.profile!,
             passwordChangedFirstTime: true,
           },
         }),

@@ -4,12 +4,13 @@ import {
   OnInit,
 } from '@angular/core';
 import { navigationItems } from './home-routing.module';
-import { filter, Subscription } from 'rxjs';
+import { filter, Subscription, take } from 'rxjs';
 import { Nullable } from 'src/app/models/nullable.type';
 import { UserProfile } from 'src/app/models/profile.interface';
 import { AppState } from 'src/app/store/app.state';
 import { Store } from '@ngrx/store';
 import { NavigationEnd, Router } from '@angular/router';
+import { ProfileHelper } from 'src/app/helpers/profile.helper';
 
 @Component({
   selector: 'app-home-screen',
@@ -17,10 +18,9 @@ import { NavigationEnd, Router } from '@angular/router';
   styleUrl: './home-screen.component.scss',
 })
 export class HomeScreenComponent
+  extends ProfileHelper
   implements OnInit, OnDestroy
 {
-  protected profile: Nullable<UserProfile> = null;
-
   protected navigationItems: any[] = navigationItems;
 
   protected isSidebarExpanded: boolean = true;
@@ -37,13 +37,19 @@ export class HomeScreenComponent
   private subscription: Subscription = new Subscription();
 
   public constructor(
-    private store: Store<AppState>,
+    store: Store<AppState>,
     private router: Router,
-  ) {}
+  ) {
+    super(store);
+  }
 
   public ngOnInit(): void {
     this.loadUserProfile();
     this.detectActiveRoute();
+  }
+
+  public ngOnDestroy(): void {
+    this.subscription?.unsubscribe();
   }
 
   protected toggleSidebar(): void {
@@ -97,14 +103,16 @@ export class HomeScreenComponent
   }
 
   private loadUserProfile() {
-    this.subscription = this.store
-      .select((state) => state.profile)
-      .subscribe((profile) => {
-        this.profile = profile;
-      });
-  }
-
-  public ngOnDestroy(): void {
-    this.subscription?.unsubscribe();
+    this.subscription.add(
+      this.profile$
+        .pipe(
+          filter(
+            (p: Nullable<UserProfile>): p is UserProfile =>
+              !!p,
+          ),
+          take(1),
+        )
+        .subscribe(),
+    );
   }
 }
