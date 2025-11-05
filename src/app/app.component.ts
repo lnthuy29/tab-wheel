@@ -25,7 +25,7 @@ export class AppComponent
   extends ProfileHelper
   implements OnInit, OnDestroy
 {
-  private subscription!: Subscription;
+  private subscription: Subscription = new Subscription();
 
   @ViewChild(ChangePasswordModalComponent)
   public modal!: ChangePasswordModalComponent;

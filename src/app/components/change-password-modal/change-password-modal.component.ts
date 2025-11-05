@@ -41,7 +41,7 @@ export class ChangePasswordModalComponent
 
   protected isVisible = false;
 
-  private subscription!: Subscription;
+  private subscription: Subscription = new Subscription();
 
   private passwordsMatchValidator: ValidatorFn = (
     control: AbstractControl,
