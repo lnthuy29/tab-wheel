@@ -4,7 +4,7 @@ import {
   OnInit,
 } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Subscription } from 'rxjs';
+import { filter, Subscription, take, tap } from 'rxjs';
 import { LoadingState } from 'src/app/models/loading-state.enum';
 import { Nullable } from 'src/app/models/nullable.type';
 import { UserProfile } from 'src/app/models/profile.interface';
@@ -15,6 +15,7 @@ import {
 } from './utilities/overview-section.utils';
 import { NumberComponentProp } from 'src/app/components/number/number.component';
 import { DashboardService } from '../../services/dashboard.service';
+import { ProfileHelper } from 'src/app/helpers/profile.helper';
 
 @Component({
   selector: 'app-dashboard-overview-section',
@@ -22,10 +23,9 @@ import { DashboardService } from '../../services/dashboard.service';
   styleUrl: './overview-section.component.scss',
 })
 export class DashboardOverviewSectionComponent
+  extends ProfileHelper
   implements OnInit, OnDestroy
 {
-  protected profile: Nullable<UserProfile> = null;
-
   protected numberComponentProps: Nullable<
     NumberComponentProp[]
   > = null;
@@ -35,12 +35,25 @@ export class DashboardOverviewSectionComponent
   private subscription: Subscription = new Subscription();
 
   public constructor(
-    private store: Store<AppState>,
+    store: Store<AppState>,
     private dashboardService: DashboardService,
-  ) {}
+  ) {
+    super(store);
+  }
 
   public ngOnInit(): void {
-    this.loadUserProfile();
+    this.subscription.add(
+      this.profile$
+        .pipe(
+          filter(
+            (p: Nullable<UserProfile>): p is UserProfile =>
+              !!p,
+          ),
+          take(1),
+          tap(() => this.loadDashboardData()),
+        )
+        .subscribe(),
+    );
   }
 
   public ngOnDestroy(): void {
@@ -49,15 +62,6 @@ export class DashboardOverviewSectionComponent
 
   protected get daySession(): string {
     return getGreeting(getSessionOfDay());
-  }
-
-  private async loadUserProfile() {
-    this.subscription = this.store
-      .select((state) => state.profile)
-      .subscribe((profile) => {
-        this.profile = profile;
-        this.loadDashboardData();
-      });
   }
 
   private async loadDashboardData(): Promise<void> {
