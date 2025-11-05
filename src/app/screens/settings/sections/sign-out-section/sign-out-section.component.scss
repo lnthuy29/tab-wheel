@@ -13,5 +13,7 @@
 
   &__button {
     @extend .button-outlined;
+    border-color: var(--color-dangerous);
+    color: var(--color-dangerous);
   }
 }
