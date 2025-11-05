@@ -28,7 +28,7 @@
 <ng-template #statistic>
   <div class="app-dashboard-overview__statistic">
     <ng-container
-      *ngIf="numberComponentProps; else loadingState"
+      *ngIf="numberComponentProps; else loading"
     >
       <app-number
         *ngFor="let item of numberComponentProps"
@@ -36,11 +36,13 @@
       />
     </ng-container>
 
-    <ng-template #loadingState>
+    <ng-template #loading>
       <div
-        class="app-dashboard-overview__statistic__loading"
+        class="app-dashboard-overview__statistic--loading"
       >
-        Loading statistics...
+        <div class="skeleton"></div>
+        <div class="skeleton"></div>
+        <div class="skeleton"></div>
       </div>
     </ng-template>
   </div>

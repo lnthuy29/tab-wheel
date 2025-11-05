@@ -26,11 +26,22 @@
       }
     }
   }
+
   &__statistic {
     @extend .card;
     padding: 12px;
     background-color: var(--color-background);
     display: flex;
     gap: 8px;
+
+    &--loading {
+      display: flex;
+      gap: 12px;
+      width: 100%;
+
+      & > * {
+        height: 5.5em;
+      }
+    }
   }
 }
