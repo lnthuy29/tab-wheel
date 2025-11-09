@@ -1,0 +1,69 @@
+<div class="app-sign-up-screen">
+  <div class="app-sign-up-screen__card">
+    <div class="app-sign-up-screen__card__header">
+      <h1
+        class="app-sign-up-screen__card__header__app-name"
+      >
+        Tab Wheel
+      </h1>
+      <h2 class="app-sign-up-screen__card__header__title">
+        Create an account to play
+      </h2>
+    </div>
+
+    <div class="app-sign-up-screen__card__body">
+      <form
+        [formGroup]="form"
+        (ngSubmit)="onSubmit()"
+        (keydown.enter)="onSubmit()"
+        class="app-sign-up-screen__card__body__form"
+      >
+        <app-form-field
+          label="Your name"
+          type="text"
+          [control]="fieldControl('displayName')"
+        ></app-form-field>
+
+        <app-form-field
+          label="Email"
+          type="email"
+          [control]="fieldControl('email')"
+        ></app-form-field>
+
+        <app-form-field
+          label="Password"
+          type="password"
+          [control]="fieldControl('password')"
+        ></app-form-field>
+
+        <app-form-field
+          label="Retype password"
+          type="retypedPassword"
+          [control]="fieldControl('retypedPassword')"
+        ></app-form-field>
+
+        <button
+          type="submit"
+          [disabled]="
+            form.invalid ||
+            loadingState === LoadingState.LOADING
+          "
+          class="app-sign-up-screen__card__body__form__submit-button"
+        >
+          <ng-container
+            *ngIf="
+              loadingState !== LoadingState.LOADING;
+              else loading
+            "
+          >
+            Join us
+          </ng-container>
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<ng-template #loading>
+  <span class="spinner"></span>
+</ng-template>

@@ -27,10 +27,12 @@ import { DashboardOverviewSectionComponent } from './screens/dashboard/sections/
 import { DashboardJoinedGroupsSectionComponent } from './screens/dashboard/sections/joined-groups-section/joined-groups-section.component';
 import { DashboardMatchScheduleSectionComponent } from './screens/dashboard/sections/match-schedule-section/match-schedule-section.component';
 import { NumberComponent } from './components/number/number.component';
+import { SignUpScreenComponent } from './screens/sign-up/sign-up-screen.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    SignUpScreenComponent,
     LogInScreenComponent,
     ChangePasswordModalComponent,
     HomeScreenComponent,
