@@ -22,63 +22,25 @@ export class AuthService {
     password: string,
     profile?: Partial<UserProfile>,
   ): Promise<{ data: Nullable<UserProfile>; error: any }> {
-    try {
-      // Step 1: Create account in Supabase Auth
-      const { data: signUpData, error: signUpError } =
-        await supabase.auth.signUp({
-          email,
-          password,
-          options: {
-            // The redirect URL after email confirmation
-            emailRedirectTo: `${window.location.origin}/auth/callback`,
-          },
-        });
+    const { error: signUpError } =
+      await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          // The redirect URL after email confirmation
+          emailRedirectTo: `${window.location.origin}/sign-up/callback`,
+        },
+      });
 
-      if (signUpError) {
-        console.error('Sign-up failed:', signUpError);
-        return { data: null, error: signUpError };
-      }
-
-      const user = signUpData.user;
-      if (!user) {
-        // No user yet, waiting for email verification
-        return {
-          data: null,
-          error: null,
-        };
-      }
-
-      // Step 2: Create profile record (optional)
-      const newProfile = {
-        id: user.id,
-        email: user.email,
-        displayName: profile?.displayName ?? '',
-      };
-
-      const payload = toSnakeCaseObject(newProfile);
-
-      const { data, error } = await supabase
-        .from(EntityTable.PROFILES)
-        .insert(payload)
-        .select('*')
-        .single();
-
-      if (error) {
-        console.error(
-          'Failed to create user profile:',
-          error,
-        );
-        return { data: null, error };
-      }
-
-      const createdProfile =
-        toCamelCaseObject<UserProfile>(data);
-
-      return { data: createdProfile, error: null };
-    } catch (err) {
-      console.error('Failed to sign up:', err);
-      return { data: null, error: err };
+    if (signUpError) {
+      console.error('Failed to sign up:', signUpError);
+      return { data: null, error: signUpError };
     }
+
+    return {
+      data: null,
+      error: null,
+    };
   }
 
   public async signIn(email: string, password: string) {
