@@ -1,0 +1,75 @@
+<div class="app-create-profile-screen">
+  <div class="app-create-profile-screen__card">
+    <div class="app-create-profile-screen__card__header">
+      <h1
+        class="app-create-profile-screen__card__header__app-name"
+      >
+        Tab Wheel
+      </h1>
+      <h2
+        class="app-create-profile-screen__card__header__title"
+      >
+        Tell us a little bit about you
+      </h2>
+    </div>
+
+    <div class="app-create-profile-screen__card__body">
+      <!-- Loading state while processing magic link -->
+      <div [ngSwitch]="loadingState">
+        <div *ngSwitchCase="LoadingState.INITIAL">
+          <ng-container
+            [ngTemplateOutlet]="profileCreationForm"
+          ></ng-container>
+        </div>
+        <div *ngSwitchCase="LoadingState.LOADING">
+          Your email is being confirmed
+        </div>
+        <div *ngSwitchCase="LoadingState.LOADED">
+          <ng-container
+            [ngTemplateOutlet]="profileCreationForm"
+          ></ng-container>
+        </div>
+        <div *ngSwitchCase="LoadingState.ERROR">
+          Failed to confirm your email
+        </div>
+        <div *ngSwitchDefault></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #profileCreationForm>
+  <form
+    [formGroup]="form"
+    (ngSubmit)="onSubmit()"
+    (keydown.enter)="onSubmit()"
+    class="app-create-profile-screen__card__body__form"
+  >
+    <app-form-field
+      label="Your name"
+      type="text"
+      [control]="fieldControl('displayName')"
+    ></app-form-field>
+
+    <button
+      type="submit"
+      [disabled]="
+        form.invalid || submitState === LoadingState.LOADING
+      "
+      class="app-create-profile-screen__card__body__form__submit-button"
+    >
+      <ng-container
+        *ngIf="
+          submitState !== LoadingState.LOADING;
+          else submitting
+        "
+      >
+        Ready to play
+      </ng-container>
+    </button>
+  </form>
+</ng-template>
+
+<ng-template #submitting>
+  <span class="spinner"></span>
+</ng-template>

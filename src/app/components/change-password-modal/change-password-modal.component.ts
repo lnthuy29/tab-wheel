@@ -1,26 +1,19 @@
 import {
-  ChangeDetectorRef,
   Component,
   Input,
   OnDestroy,
   OnInit,
 } from '@angular/core';
 import { ModalConfiguration } from '../modal/models/modal.interface';
-import { ModalSize } from '../modal/models/modal-size.enum';
 import {
   FormGroup,
   FormControl,
   Validators,
-  ValidatorFn,
-  AbstractControl,
-  ValidationErrors,
 } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { AuthService } from 'src/app/services/auth.service';
-import { Router } from '@angular/router';
 import { LoadingState } from 'src/app/models/loading-state.enum';
 import { Nullable } from 'src/app/models/nullable.type';
-import { selectProfile } from 'src/app/store/profile/profile.selector';
 import { UserProfile } from 'src/app/models/profile.interface';
 import { AppState } from 'src/app/store/app.state';
 import { setUserProfile } from 'src/app/store/profile/profile.action';

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { supabase } from '@supabase';
-import { UserResponse } from '@supabase/supabase-js';
+import { User, UserResponse } from '@supabase/supabase-js';
 import { EntityTable } from 'src/app/models/entity.enum';
 import { Nullable } from 'src/app/models/nullable.type';
 import { UserProfile } from 'src/app/models/profile.interface';
@@ -20,7 +20,6 @@ export class AuthService {
   public async signUp(
     email: string,
     password: string,
-    profile?: Partial<UserProfile>,
   ): Promise<{ data: Nullable<UserProfile>; error: any }> {
     const { error: signUpError } =
       await supabase.auth.signUp({
@@ -28,7 +27,7 @@ export class AuthService {
         password,
         options: {
           // The redirect URL after email confirmation
-          emailRedirectTo: `${window.location.origin}/sign-up/callback`,
+          emailRedirectTo: `${window.location.origin}/confirm-email`,
         },
       });
 
@@ -41,6 +40,49 @@ export class AuthService {
       data: null,
       error: null,
     };
+  }
+
+  public async createProfile(
+    profile: Partial<UserProfile>,
+    user: User,
+  ): Promise<{
+    data: Nullable<UserProfile>;
+    error: Nullable<string>;
+  }> {
+    // Validate required fields
+    if (!user) {
+      return {
+        data: null,
+        error: 'User session not found',
+      };
+    }
+
+    if (!profile.displayName) {
+      return {
+        data: null,
+        error: 'Display name is required',
+      };
+    }
+
+    // Insert the profile into Supabase
+    const { data: insertData, error: insertError } =
+      await supabase
+        .from('profiles')
+        .insert([
+          {
+            id: user.id,
+            display_name: profile.displayName,
+            employee_role_id:
+              '30cabd23-6486-4f1f-a6c0-915178952c3d',
+          },
+        ])
+        .select(); // Returns the inserted row
+
+    if (insertError) {
+      return { data: null, error: insertError.message };
+    }
+
+    return { data: insertData?.[0] ?? null, error: null };
   }
 
   public async signIn(email: string, password: string) {

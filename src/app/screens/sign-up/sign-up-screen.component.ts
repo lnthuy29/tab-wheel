@@ -22,10 +22,6 @@ export class SignUpScreenComponent implements OnInit {
 
   protected form: FormGroup = new FormGroup(
     {
-      displayName: new FormControl('', [
-        Validators.required,
-        Validators.minLength(2),
-      ]),
       email: new FormControl('', [
         Validators.required,
         Validators.email,
@@ -71,7 +67,6 @@ export class SignUpScreenComponent implements OnInit {
     const { error } = await this.service.signUp(
       this.form.value.email!,
       this.form.value.newPassword!,
-      { displayName: this.form.value.displayName! },
     );
 
     if (error) {
