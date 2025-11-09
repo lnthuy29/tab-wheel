@@ -27,6 +27,7 @@ import { setUserProfile } from 'src/app/store/profile/profile.action';
 import { ToastService } from 'src/app/services/toast.service';
 import { ProfileHelper } from 'src/app/helpers/profile.helper';
 import { filter, Subscription, take } from 'rxjs';
+import { passwordsMatchValidator } from 'src/app/utilities/input-validator.utils';
 
 @Component({
   selector: 'app-change-password-modal',
@@ -43,53 +44,22 @@ export class ChangePasswordModalComponent
 
   private subscription: Subscription = new Subscription();
 
-  private passwordsMatchValidator: ValidatorFn = (
-    control: AbstractControl,
-  ): Nullable<ValidationErrors> => {
-    const newPassword = control.get('new')?.value;
-    const retypedControl = control.get('retyped');
-
-    const mismatch =
-      newPassword &&
-      retypedControl?.value &&
-      newPassword !== retypedControl.value;
-
-    if (mismatch) {
-      // add mismatch error to the retyped control without clobbering other errors
-      const existing = retypedControl?.errors ?? {};
-      retypedControl?.setErrors({
-        ...existing,
-        mismatch: true,
-      });
-      return { mismatch: true };
-    } else {
-      // remove mismatch error from the retyped control if present
-      if (retypedControl?.errors) {
-        const { mismatch: _m, ...rest } =
-          retypedControl.errors;
-        const hasOther = Object.keys(rest).length > 0;
-        retypedControl.setErrors(hasOther ? rest : null);
-      }
-      return null;
-    }
-  };
-
   protected form: FormGroup = new FormGroup(
     {
-      current: new FormControl('', [
+      currentPassword: new FormControl('', [
         Validators.required,
         Validators.minLength(2),
       ]),
-      new: new FormControl('', [
+      newPassword: new FormControl('', [
         Validators.required,
         Validators.minLength(8),
       ]),
-      retyped: new FormControl('', [
+      retypedPassword: new FormControl('', [
         Validators.required,
         Validators.minLength(8),
       ]),
     },
-    { validators: this.passwordsMatchValidator },
+    { validators: passwordsMatchValidator },
   );
 
   protected fieldControl(fieldName: string): FormControl {
@@ -149,8 +119,9 @@ export class ChangePasswordModalComponent
     this.loadingState = LoadingState.LOADING;
 
     const currentPassword = this.form.value
-      .current as string;
-    const newPassword = this.form.value.new as string;
+      .currentPassword as string;
+    const newPassword = this.form.value
+      .newPassword as string;
 
     try {
       const currentPasswordValid =

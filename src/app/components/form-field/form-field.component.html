@@ -23,5 +23,8 @@
       {{ control.errors?.['minlength'].requiredLength }}
       characters
     </small>
+    <small *ngIf="control.errors?.['mismatch']">
+      Passwords do not match
+    </small>
   </div>
 </div>

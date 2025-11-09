@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { LoadingState } from 'src/app/models/loading-state.enum';
 import { AuthService } from 'src/app/services/auth.service';
 import { ToastService } from 'src/app/services/toast.service';
+import { passwordsMatchValidator } from 'src/app/utilities/input-validator.utils';
 
 @Component({
   selector: 'app-sign-up-screen',
@@ -19,24 +20,27 @@ export class SignUpScreenComponent implements OnInit {
 
   protected LoadingState = LoadingState;
 
-  protected form: FormGroup = new FormGroup({
-    displayName: new FormControl('', [
-      Validators.required,
-      Validators.minLength(2),
-    ]),
-    email: new FormControl('', [
-      Validators.required,
-      Validators.email,
-    ]),
-    password: new FormControl('', [
-      Validators.required,
-      Validators.minLength(2),
-    ]),
-    retypedPassword: new FormControl('', [
-      Validators.required,
-      Validators.minLength(2),
-    ]),
-  });
+  protected form: FormGroup = new FormGroup(
+    {
+      displayName: new FormControl('', [
+        Validators.required,
+        Validators.minLength(2),
+      ]),
+      email: new FormControl('', [
+        Validators.required,
+        Validators.email,
+      ]),
+      newPassword: new FormControl('', [
+        Validators.required,
+        Validators.minLength(8),
+      ]),
+      retypedPassword: new FormControl('', [
+        Validators.required,
+        Validators.minLength(8),
+      ]),
+    },
+    { validators: passwordsMatchValidator },
+  );
 
   public constructor(
     private router: Router,
@@ -66,7 +70,7 @@ export class SignUpScreenComponent implements OnInit {
 
     const { error } = await this.service.signUp(
       this.form.value.email!,
-      this.form.value.password!,
+      this.form.value.newPassword!,
       { displayName: this.form.value.displayName! },
     );
 
