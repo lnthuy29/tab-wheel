@@ -18,11 +18,13 @@
       <div [ngSwitch]="loadingState">
         <div *ngSwitchCase="LoadingState.INITIAL">
           <ng-container
-            [ngTemplateOutlet]="profileCreationForm"
+            [ngTemplateOutlet]="loading"
           ></ng-container>
         </div>
         <div *ngSwitchCase="LoadingState.LOADING">
-          Your email is being confirmed
+          <ng-container
+            [ngTemplateOutlet]="loading"
+          ></ng-container>
         </div>
         <div *ngSwitchCase="LoadingState.LOADED">
           <ng-container
@@ -30,13 +32,31 @@
           ></ng-container>
         </div>
         <div *ngSwitchCase="LoadingState.ERROR">
-          Failed to confirm your email
+          <ng-container
+            [ngTemplateOutlet]="error"
+          ></ng-container>
         </div>
-        <div *ngSwitchDefault></div>
       </div>
     </div>
   </div>
 </div>
+
+<ng-template #loading>
+  <div
+    style="
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 32px;
+    "
+  >
+    <span
+      class="spinner"
+      style="width: 64px; height: 64px"
+    ></span>
+    <p>Confirming your email...</p>
+  </div>
+</ng-template>
 
 <ng-template #profileCreationForm>
   <form
@@ -72,4 +92,11 @@
 
 <ng-template #submitting>
   <span class="spinner"></span>
+</ng-template>
+
+<ng-template #error>
+  <app-illustration-message
+    [illustrationSrc]="'images/error.jpg'"
+    [message]="'Your email couldn\'t be confirmed.'"
+  />
 </ng-template>

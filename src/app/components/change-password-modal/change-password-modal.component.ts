@@ -156,7 +156,6 @@ export class ChangePasswordModalComponent
         setUserProfile({
           profile: {
             ...this.profile!,
-            passwordChangedFirstTime: true,
           },
         }),
       );

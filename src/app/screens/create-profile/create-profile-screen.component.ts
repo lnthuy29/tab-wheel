@@ -1,20 +1,28 @@
-import { Component, OnInit } from '@angular/core';
-import {
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
+import { Component } from '@angular/core';
+import { OnInit } from '@angular/core';
+
+import { FormControl } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
+import { Validators } from '@angular/forms';
+
 import { Router } from '@angular/router';
+
 import { Store } from '@ngrx/store';
+
 import { ToastService } from 'src/app/services/toast.service';
 import { AuthService } from 'src/app/services/auth.service';
 
 import { AppState } from 'src/app/store/app.state';
 import { setUserProfile } from 'src/app/store/profile/profile.action';
+
 import { LoadingState } from 'src/app/models/loading-state.enum';
-import { User } from '@supabase/supabase-js';
+
 import { supabase } from '@supabase';
+import { User } from '@supabase/supabase-js';
+
 import { Nullable } from 'src/app/models/nullable.type';
+
+import { toCamelCaseObject } from 'src/app/utilities/naming-convention.utils';
 
 @Component({
   selector: 'app-confirm-and-create-profile',
@@ -48,7 +56,7 @@ export class CreateProfileScreenComponent
     private authService: AuthService,
   ) {}
 
-  async ngOnInit() {
+  public async ngOnInit() {
     try {
       const hash = window.location.hash.substring(1);
       const params = new URLSearchParams(hash);
@@ -66,7 +74,10 @@ export class CreateProfileScreenComponent
 
         if (error) {
           this.loadingState = LoadingState.ERROR;
-          this.toastService.error(error.message);
+          console.error(error.message);
+          setTimeout(() => {
+            this.router.navigate(['/']);
+          }, 3000);
           return;
         }
 
@@ -80,21 +91,23 @@ export class CreateProfileScreenComponent
 
       if (!this.user) {
         this.loadingState = LoadingState.ERROR;
-        this.toastService.error(
-          'User session is not found',
-        );
+        setTimeout(() => {
+          this.router.navigate(['/']);
+        }, 3000);
         return;
       }
 
-      const { data: profiles } = await supabase
+      const { data } = await supabase
         .from('profiles')
         .select('*')
         .eq('id', this.user.id)
         .single();
 
-      if (profiles) {
+      if (data) {
         this.store.dispatch(
-          setUserProfile({ profile: profiles }),
+          setUserProfile({
+            profile: toCamelCaseObject(data),
+          }),
         );
         this.router.navigate(['/']);
         return;
@@ -104,10 +117,8 @@ export class CreateProfileScreenComponent
 
       this.loadingState = LoadingState.LOADED;
     } catch (err: any) {
+      this.loadingState = LoadingState.ERROR;
       console.error(err);
-      this.toastService.error(
-        err.message || 'Failed to confirm email',
-      );
     }
   }
 
@@ -117,15 +128,15 @@ export class CreateProfileScreenComponent
 
   protected async onSubmit() {
     this.form.markAllAsTouched();
+
     if (!this.form.valid) return;
 
     this.submitState = LoadingState.LOADING;
 
     const { data, error } =
-      await this.authService.createProfile(
-        { displayName: this.form.value.displayName },
-        this.user!,
-      );
+      await this.authService.createProfile(this.user!, {
+        displayName: this.form.value.displayName,
+      });
 
     if (error) {
       this.submitState = LoadingState.INITIAL;

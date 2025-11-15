@@ -43,8 +43,8 @@ export class AuthService {
   }
 
   public async createProfile(
-    profile: Partial<UserProfile>,
     user: User,
+    profile: Partial<UserProfile>,
   ): Promise<{
     data: Nullable<UserProfile>;
     error: Nullable<string>;
@@ -72,8 +72,7 @@ export class AuthService {
           {
             id: user.id,
             display_name: profile.displayName,
-            employee_role_id:
-              '30cabd23-6486-4f1f-a6c0-915178952c3d',
+            email: user.email,
           },
         ])
         .select(); // Returns the inserted row
@@ -82,7 +81,10 @@ export class AuthService {
       return { data: null, error: insertError.message };
     }
 
-    return { data: insertData?.[0] ?? null, error: null };
+    return {
+      data: toCamelCaseObject<UserProfile>(insertData[0]),
+      error: null,
+    };
   }
 
   public async signIn(email: string, password: string) {

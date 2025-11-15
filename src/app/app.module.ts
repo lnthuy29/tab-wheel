@@ -29,6 +29,7 @@ import { DashboardMatchScheduleSectionComponent } from './screens/dashboard/sect
 import { NumberComponent } from './components/number/number.component';
 import { SignUpScreenComponent } from './screens/sign-up/sign-up-screen.component';
 import { CreateProfileScreenComponent } from './screens/create-profile/create-profile-screen.component';
+import { IllustrationMessageComponent } from './components/illustration-message/illustration-message.component';
 
 @NgModule({
   declarations: [
@@ -59,6 +60,7 @@ import { CreateProfileScreenComponent } from './screens/create-profile/create-pr
     ModalComponent,
     FormFieldComponent,
     NumberComponent,
+    IllustrationMessageComponent,
   ],
   providers: [provideAnimations(), provideToastr()],
   bootstrap: [AppComponent],

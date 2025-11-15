@@ -49,7 +49,6 @@ export class DashboardOverviewSectionComponent
             (p: Nullable<UserProfile>): p is UserProfile =>
               !!p,
           ),
-          take(1),
           tap(() => this.loadDashboardData()),
         )
         .subscribe(),
@@ -66,6 +65,7 @@ export class DashboardOverviewSectionComponent
 
   private async loadDashboardData(): Promise<void> {
     const profileId: string | undefined = this.profile?.id;
+
     if (!profileId) return;
 
     try {

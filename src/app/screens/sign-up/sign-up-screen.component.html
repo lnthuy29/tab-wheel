@@ -73,16 +73,10 @@
 </ng-template>
 
 <ng-template #loaded>
-  <div class="app-sign-up-screen__card__body__next-step">
-    <div
-      class="app-sign-up-screen__card__body__next-step__illustration"
-    ></div>
-    <p>
-      You're almost in the game!
-      <br />
-      <br />
-      We've sent a verification link to your email. Click it
-      to confirm your account and start your adventure!
-    </p>
-  </div>
+  <app-illustration-message
+    [illustrationSrc]="'images/sign-up-next-step.jpg'"
+    [message]="
+      'You\'re almost in the game!<br><br>We\'ve sent a verification link to your email. Click it to confirm your account and start your adventure!'
+    "
+  />
 </ng-template>
