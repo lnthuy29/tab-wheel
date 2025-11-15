@@ -1,0 +1,53 @@
+<div class="app-dashboard-overview">
+  <ng-container
+    [ngTemplateOutlet]="greeting"
+  ></ng-container>
+  <ng-container
+    [ngTemplateOutlet]="statistic"
+  ></ng-container>
+</div>
+
+<ng-template #greeting>
+  <div class="app-dashboard-overview__greeting">
+    <div class="app-dashboard-overview__greeting__left">
+      <img
+        class="app-dashboard-overview__greeting__left__avatar"
+        [src]="
+          profile?.avatarPath ||
+          'https://ui-avatars.com/api/?name=' +
+            profile?.displayName
+        "
+        alt="User avatar"
+      />
+      <div
+        class="app-dashboard-overview__greeting__left__text"
+      >
+        <h3>{{ daySession }}</h3>
+        <p>{{ profile?.displayName }}</p>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #statistic>
+  <div class="app-dashboard-overview__statistic">
+    <ng-container
+      *ngIf="numberComponentProps; else loading"
+    >
+      <app-number
+        *ngFor="let item of numberComponentProps"
+        [prop]="item"
+      />
+    </ng-container>
+
+    <ng-template #loading>
+      <div
+        class="app-dashboard-overview__statistic--loading"
+      >
+        <div class="skeleton"></div>
+        <div class="skeleton"></div>
+        <div class="skeleton"></div>
+      </div>
+    </ng-template>
+  </div>
+</ng-template>

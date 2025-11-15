@@ -23,20 +23,31 @@ import { ChangePasswordSectionComponent } from './screens/settings/sections/chan
 import { SignOutSectionComponent } from './screens/settings/sections/sign-out-section/sign-out-section.component';
 import { ProfileDetailsSectionComponent } from './screens/settings/sections/profile-details-section/profile-details-section.component';
 import { FormFieldComponent } from './components/form-field/form-field.component';
+import { DashboardOverviewSectionComponent } from './screens/dashboard/sections/overview-section/overview-section.component';
+import { DashboardJoinedGroupsSectionComponent } from './screens/dashboard/sections/joined-groups-section/joined-groups-section.component';
+import { DashboardMatchScheduleSectionComponent } from './screens/dashboard/sections/match-schedule-section/match-schedule-section.component';
+import { NumberComponent } from './components/number/number.component';
+import { SignUpScreenComponent } from './screens/sign-up/sign-up-screen.component';
+import { CreateProfileScreenComponent } from './screens/create-profile/create-profile-screen.component';
+import { IllustrationMessageComponent } from './components/illustration-message/illustration-message.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    SignUpScreenComponent,
+    CreateProfileScreenComponent,
     LogInScreenComponent,
     ChangePasswordModalComponent,
     HomeScreenComponent,
-    DashboardScreenComponent,
     DonationScreenComponent,
-    SettingsScreenComponent,
     ProfileDetailsSectionComponent,
     ChangePasswordSectionComponent,
     SignOutSectionComponent,
-    FormFieldComponent,
+    SettingsScreenComponent,
+    DashboardOverviewSectionComponent,
+    DashboardJoinedGroupsSectionComponent,
+    DashboardMatchScheduleSectionComponent,
+    DashboardScreenComponent,
   ],
   imports: [
     CommonModule,
@@ -47,6 +58,9 @@ import { FormFieldComponent } from './components/form-field/form-field.component
     AppRoutingModule,
     HomeRoutingModule,
     ModalComponent,
+    FormFieldComponent,
+    NumberComponent,
+    IllustrationMessageComponent,
   ],
   providers: [provideAnimations(), provideToastr()],
   bootstrap: [AppComponent],

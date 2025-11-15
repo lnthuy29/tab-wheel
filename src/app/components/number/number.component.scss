@@ -1,0 +1,9 @@
+@use '../../styles/styles.scss';
+
+.app-number {
+  @extend .card;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}

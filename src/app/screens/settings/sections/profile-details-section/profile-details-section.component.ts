@@ -9,7 +9,8 @@ import {
   Validators,
 } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { Subscription } from 'rxjs';
+import { filter, Subscription, take, tap } from 'rxjs';
+import { ProfileHelper } from 'src/app/helpers/profile.helper';
 import { LoadingState } from 'src/app/models/loading-state.enum';
 import { Nullable } from 'src/app/models/nullable.type';
 import { UserProfile } from 'src/app/models/profile.interface';
@@ -24,9 +25,9 @@ import { setUserProfile } from 'src/app/store/profile/profile.action';
   styleUrl: './profile-details-section.component.scss',
 })
 export class ProfileDetailsSectionComponent
+  extends ProfileHelper
   implements OnInit, OnDestroy
 {
-  protected profile: Nullable<UserProfile> = null;
   private subscription: Subscription = new Subscription();
 
   protected submitState: LoadingState =
@@ -45,10 +46,12 @@ export class ProfileDetailsSectionComponent
   });
 
   public constructor(
-    private store: Store<AppState>,
+    store: Store<AppState>,
     private service: AuthService,
     private toastService: ToastService,
-  ) {}
+  ) {
+    super(store);
+  }
 
   public ngOnInit(): void {
     this.loadUserProfile();
@@ -153,14 +156,21 @@ export class ProfileDetailsSectionComponent
   }
 
   private loadUserProfile() {
-    this.subscription = this.store
-      .select((state) => state.profile)
-      .subscribe((profile) => {
-        this.profile = profile;
-
-        this.form.patchValue({
-          displayName: profile?.displayName || '',
-        });
-      });
+    this.subscription.add(
+      this.profile$
+        .pipe(
+          filter(
+            (p: Nullable<UserProfile>): p is UserProfile =>
+              !!p,
+          ),
+          take(1),
+          tap(() =>
+            this.form.patchValue({
+              displayName: this.profile?.displayName || '',
+            }),
+          ),
+        )
+        .subscribe(),
+    );
   }
 }

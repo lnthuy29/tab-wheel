@@ -1,0 +1,82 @@
+<div class="app-sign-up-screen">
+  <div class="app-sign-up-screen__card">
+    <div class="app-sign-up-screen__card__header">
+      <h1
+        class="app-sign-up-screen__card__header__app-name"
+      >
+        Tab Wheel
+      </h1>
+      <h2 class="app-sign-up-screen__card__header__title">
+        Create an account to play
+      </h2>
+    </div>
+
+    <div class="app-sign-up-screen__card__body">
+      <ng-container
+        [ngTemplateOutlet]="
+          loadingState !== LoadingState.LOADED
+            ? initial
+            : loaded
+        "
+      ></ng-container>
+    </div>
+  </div>
+</div>
+
+<ng-template #initial>
+  <form
+    [formGroup]="form"
+    (ngSubmit)="onSubmit()"
+    (keydown.enter)="onSubmit()"
+    class="app-sign-up-screen__card__body__form"
+  >
+    <app-form-field
+      label="Email"
+      type="email"
+      [control]="fieldControl('email')"
+    ></app-form-field>
+
+    <app-form-field
+      label="Password"
+      type="password"
+      [control]="fieldControl('newPassword')"
+    ></app-form-field>
+
+    <app-form-field
+      label="Retype password"
+      type="password"
+      [control]="fieldControl('retypedPassword')"
+    ></app-form-field>
+
+    <button
+      type="submit"
+      [disabled]="
+        form.invalid ||
+        loadingState === LoadingState.LOADING
+      "
+      class="app-sign-up-screen__card__body__form__submit-button"
+    >
+      <ng-container
+        *ngIf="
+          loadingState !== LoadingState.LOADING;
+          else loading
+        "
+      >
+        Join us
+      </ng-container>
+    </button>
+  </form>
+</ng-template>
+
+<ng-template #loading>
+  <span class="spinner"></span>
+</ng-template>
+
+<ng-template #loaded>
+  <app-illustration-message
+    [illustrationSrc]="'images/sign-up-next-step.jpg'"
+    [message]="
+      'You\'re almost in the game!<br><br>We\'ve sent a verification link to your email. Click it to confirm your account and start your adventure!'
+    "
+  />
+</ng-template>

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { supabase } from '@supabase';
-import { UserResponse } from '@supabase/supabase-js';
+import { User, UserResponse } from '@supabase/supabase-js';
 import { EntityTable } from 'src/app/models/entity.enum';
 import { Nullable } from 'src/app/models/nullable.type';
 import { UserProfile } from 'src/app/models/profile.interface';
@@ -15,6 +15,76 @@ import {
 export class AuthService {
   public async getSession() {
     return await supabase.auth.getSession();
+  }
+
+  public async signUp(
+    email: string,
+    password: string,
+  ): Promise<{ data: Nullable<UserProfile>; error: any }> {
+    const { error: signUpError } =
+      await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          // The redirect URL after email confirmation
+          emailRedirectTo: `${window.location.origin}/confirm-email`,
+        },
+      });
+
+    if (signUpError) {
+      console.error('Failed to sign up:', signUpError);
+      return { data: null, error: signUpError };
+    }
+
+    return {
+      data: null,
+      error: null,
+    };
+  }
+
+  public async createProfile(
+    user: User,
+    profile: Partial<UserProfile>,
+  ): Promise<{
+    data: Nullable<UserProfile>;
+    error: Nullable<string>;
+  }> {
+    // Validate required fields
+    if (!user) {
+      return {
+        data: null,
+        error: 'User session not found',
+      };
+    }
+
+    if (!profile.displayName) {
+      return {
+        data: null,
+        error: 'Display name is required',
+      };
+    }
+
+    // Insert the profile into Supabase
+    const { data: insertData, error: insertError } =
+      await supabase
+        .from('profiles')
+        .insert([
+          {
+            id: user.id,
+            display_name: profile.displayName,
+            email: user.email,
+          },
+        ])
+        .select(); // Returns the inserted row
+
+    if (insertError) {
+      return { data: null, error: insertError.message };
+    }
+
+    return {
+      data: toCamelCaseObject<UserProfile>(insertData[0]),
+      error: null,
+    };
   }
 
   public async signIn(email: string, password: string) {

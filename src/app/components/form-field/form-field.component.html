@@ -4,6 +4,7 @@
     [type]="type"
     class="input-group__input"
     [formControl]="control"
+    [autocomplete]="type"
   />
   <div
     *ngIf="
@@ -21,6 +22,9 @@
       Must be at least
       {{ control.errors?.['minlength'].requiredLength }}
       characters
+    </small>
+    <small *ngIf="control.errors?.['mismatch']">
+      Passwords do not match
     </small>
   </div>
 </div>
