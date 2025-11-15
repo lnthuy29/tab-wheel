@@ -12,7 +12,11 @@
     <div class="app-dashboard-overview__greeting__left">
       <img
         class="app-dashboard-overview__greeting__left__avatar"
-        [src]="profile?.avatarPath"
+        [src]="
+          profile?.avatarPath ||
+          'https://ui-avatars.com/api/?name=' +
+            profile?.displayName
+        "
         alt="User avatar"
       />
       <div
